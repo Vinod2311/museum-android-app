@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
@@ -24,17 +25,27 @@ class AddMuseumView : AppCompatActivity() {
         setContentView(binding.root)
         binding.toolbar.title = title
         setSupportActionBar(binding.toolbar)
+        val dropdownItems = resources.getStringArray(R.array.simple_items)
+        val arrayAdapter = ArrayAdapter(this, R.layout.dropdown_item, dropdownItems)
+        //val dropdownMenu = findViewById<AutoCompleteTextView>(R.id.category)
+        //dropdownMenu.setAdapter(arrayAdapter)
+        binding.category.setAdapter(arrayAdapter)
         presenter = AddMuseumPresenter(this)
 
         binding.chooseImage.setOnClickListener{
-            presenter.cacheMuseum(binding.name.text.toString(),binding.shortDescription.text.toString())
+            presenter.cacheMuseum(binding.nameText.text.toString(),binding.shortDescriptionText.text.toString(),binding.category.text.toString(), binding.ratingBar.rating)
             presenter.doSelectImage()
+        }
+
+        binding.location.setOnClickListener{
+            presenter.cacheMuseum(binding.nameText.text.toString(),binding.shortDescriptionText.text.toString(),binding.category.text.toString(), binding.ratingBar.rating)
+            presenter.doSetLocation()
         }
 
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_add_museum, menu)
+        menuInflater.inflate(R.menu.menu_secondary, menu)
         val deleteMenu: MenuItem = menu.findItem(R.id.item_delete)
         deleteMenu.isVisible = presenter.edit
         return super.onCreateOptionsMenu(menu)
@@ -43,12 +54,12 @@ class AddMuseumView : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.item_save -> {
-                if (binding.name.text.toString().isEmpty()) {
+                if (binding.nameText.toString().isEmpty()) {
                     Snackbar.make(binding.root, "Please enter museum name", Snackbar.LENGTH_LONG)
                         .show()
                 } else {
-                    presenter.cacheMuseum(binding.name.text.toString(), binding.shortDescription.text.toString())
-                    presenter.doAddOrSave(binding.name.text.toString(), binding.shortDescription.text.toString())
+                    presenter.cacheMuseum(binding.nameText.text.toString(), binding.shortDescriptionText.text.toString(),binding.category.text.toString(), binding.ratingBar.rating)
+                    presenter.doAddOrSave(binding.nameText.text.toString(), binding.shortDescriptionText.text.toString(),binding.category.text.toString(), binding.ratingBar.rating)
                 }
             }
             R.id.item_delete -> {
@@ -62,8 +73,10 @@ class AddMuseumView : AppCompatActivity() {
     }
 
     fun showMuseum(museum: MuseumModel) {
-        binding.name.setText(museum.name)
-        binding.shortDescription.setText(museum.shortDescription)
+        binding.nameText.setText(museum.name)
+        binding.shortDescriptionText.setText(museum.shortDescription)
+        binding.category.setText(museum.category,false)
+        binding.ratingBar.rating = museum.rating
         Picasso.get()
             .load(museum.image)
             .into(binding.imageView)

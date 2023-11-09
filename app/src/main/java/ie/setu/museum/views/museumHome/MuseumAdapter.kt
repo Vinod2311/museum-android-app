@@ -25,6 +25,8 @@ class MuseumAdapter constructor( private var museums: List<MuseumModel>, private
         holder.bind(museum,listener)
     }
 
+
+
     override fun getItemCount(): Int = museums.size
 
 
@@ -33,7 +35,7 @@ class MuseumAdapter constructor( private var museums: List<MuseumModel>, private
 
         fun bind(museum: MuseumModel, listener: MuseumListener) {
             binding.name.text = museum.name
-            binding.description.text = museum.shortDescription
+
             binding.category.text = museum.category
             Picasso.get()
                 .load(museum.image)

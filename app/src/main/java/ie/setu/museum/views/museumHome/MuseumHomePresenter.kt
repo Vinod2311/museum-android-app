@@ -7,6 +7,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import ie.setu.museum.main.MainApp
 import ie.setu.museum.models.MuseumModel
 import ie.setu.museum.views.addMuseum.AddMuseumView
+import ie.setu.museum.views.allMuseumLocations.AllMuseumLocationsView
+import java.util.Locale
 
 class MuseumHomePresenter(private val view: MuseumHomeView) {
 
@@ -15,13 +17,29 @@ class MuseumHomePresenter(private val view: MuseumHomeView) {
     private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
     private var position: Int = 0
 
+
     init {
         app = view.application as MainApp
         registerMapCallback()
         registerRefreshCallback()
+
     }
 
     fun getMuseums() = app.museums.findAll()
+
+    fun doFilterList(query:String?): ArrayList<MuseumModel>{
+        val filteredList = ArrayList<MuseumModel>()
+        if (query != null){
+            val searchText = query.lowercase(Locale.ROOT)
+            for (i in app.museums.findAll()){
+                if(i.name.lowercase(Locale.ROOT).contains(searchText)){
+                    filteredList.add(i)
+                }
+            }
+        }
+        return filteredList
+    }
+
 
     fun doAddMuseum() {
         val launchIntent = Intent(view, AddMuseumView::class.java)
@@ -36,9 +54,9 @@ class MuseumHomePresenter(private val view: MuseumHomeView) {
     }
 
     fun doShowMuseumsMap() {
-        /*
-        val launcherIntent = Intent(view, ::class.java)
-        mapIntentLauncher.launch(launcherIntent)*/
+
+        val launcherIntent = Intent(view, AllMuseumLocationsView::class.java)
+        mapIntentLauncher.launch(launcherIntent)
     }
 
     private fun registerRefreshCallback() {

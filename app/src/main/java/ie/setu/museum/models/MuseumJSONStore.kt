@@ -57,6 +57,10 @@ class MuseumJSONStore(private val context: Context) : MuseumStore {
             foundMuseum.shortDescription = museum.shortDescription
             foundMuseum.image = museum.image
             foundMuseum.category = museum.category
+            foundMuseum.lat = museum.lat
+            foundMuseum.lng = museum.lng
+            foundMuseum.zoom = museum.zoom
+            foundMuseum.rating = museum.rating
             logAll()
             serialize()
         }

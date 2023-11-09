@@ -19,16 +19,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <SearchView
+        <androidx.appcompat.widget.SearchView
             android:id="@+id/search_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:iconifiedByDefault="false"
-            android:background="@color/colorAccent"
-            android:queryHint="Search...."
-            android:textColor="@color/black">
+            android:background="@color/colorPrimary"
+            app:iconifiedByDefault="false"
+            app:queryHint="Search...."
+            app:queryBackground="@android:color/transparent">
 
-        </SearchView>
+        </androidx.appcompat.widget.SearchView>
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.appbar.AppBarLayout
@@ -67,14 +67,13 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/floating_action_button"
+        android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:contentDescription="desd"
         android:text="Add Museum"
         app:layout_constraintBottom_toTopOf="@+id/appBarLayout"
         app:layout_constraintEnd_toEndOf="parent"

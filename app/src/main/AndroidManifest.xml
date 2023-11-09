@@ -17,6 +17,17 @@
         android:theme="@style/Theme.Museum"
         tools:targetApi="31">
         <activity
+            android:name=".views.allMuseumLocations.AllMuseumLocationsView"
+            android:exported="false" />
+        <activity
+            android:name=".views.editLocation.EditLocationView"
+            android:exported="false" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
+
+        <activity
             android:name=".views.addMuseum.AddMuseumView"
             android:exported="false" />
         <activity
