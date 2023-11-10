@@ -1,7 +1,7 @@
 package ie.setu.museum.models
 
 interface MuseumStore {
-    fun findAll(): List<MuseumModel>
+    fun findAll(): ArrayList<MuseumModel>
     fun create(museum: MuseumModel)
     fun update(museum: MuseumModel)
     fun delete(museum: MuseumModel)

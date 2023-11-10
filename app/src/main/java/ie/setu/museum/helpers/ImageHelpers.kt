@@ -8,6 +8,7 @@ fun showImagePicker(intentLauncher: ActivityResultLauncher<Intent>, context: Con
     var imagePickerTargetIntent = Intent()
 
     imagePickerTargetIntent.action = Intent.ACTION_OPEN_DOCUMENT
+    imagePickerTargetIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
     imagePickerTargetIntent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
     imagePickerTargetIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     imagePickerTargetIntent.type = "image/*"

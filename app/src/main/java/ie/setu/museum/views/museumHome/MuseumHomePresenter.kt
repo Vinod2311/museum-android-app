@@ -8,7 +8,7 @@ import ie.setu.museum.main.MainApp
 import ie.setu.museum.models.MuseumModel
 import ie.setu.museum.views.addMuseum.AddMuseumView
 import ie.setu.museum.views.allMuseumLocations.AllMuseumLocationsView
-import java.util.Locale
+import ie.setu.museum.views.museumDetails.MuseumDetailsView
 
 class MuseumHomePresenter(private val view: MuseumHomeView) {
 
@@ -26,7 +26,7 @@ class MuseumHomePresenter(private val view: MuseumHomeView) {
     }
 
     fun getMuseums() = app.museums.findAll()
-
+/*
     fun doFilterList(query:String?): ArrayList<MuseumModel>{
         val filteredList = ArrayList<MuseumModel>()
         if (query != null){
@@ -39,7 +39,7 @@ class MuseumHomePresenter(private val view: MuseumHomeView) {
         }
         return filteredList
     }
-
+*/
 
     fun doAddMuseum() {
         val launchIntent = Intent(view, AddMuseumView::class.java)
@@ -50,6 +50,12 @@ class MuseumHomePresenter(private val view: MuseumHomeView) {
         val launchIntent = Intent(view, AddMuseumView::class.java)
         launchIntent.putExtra("museum_edit", museum)
         position = pos
+        refreshIntentLauncher.launch(launchIntent)
+    }
+
+    fun doShowMuseum(museum:MuseumModel) {
+        val launchIntent = Intent(view, MuseumDetailsView::class.java)
+        launchIntent.putExtra("museum", museum)
         refreshIntentLauncher.launch(launchIntent)
     }
 

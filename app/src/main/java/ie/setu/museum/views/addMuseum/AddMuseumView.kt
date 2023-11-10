@@ -77,8 +77,9 @@ class AddMuseumView : AppCompatActivity() {
         binding.shortDescriptionText.setText(museum.shortDescription)
         binding.category.setText(museum.category,false)
         binding.ratingBar.rating = museum.rating
+
         Picasso.get()
-            .load(museum.image)
+            .load(museum.image[0])
             .into(binding.imageView)
         if (museum.image != Uri.EMPTY) {
             binding.chooseImage.setText("Change Image")

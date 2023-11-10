@@ -30,7 +30,7 @@ fun generateRandomId(): Long {
 
 class MuseumJSONStore(private val context: Context) : MuseumStore {
 
-    var museums = mutableListOf<MuseumModel>()
+    var museums = arrayListOf<MuseumModel>()
 
     init {
         if (exists(context, JSON_FILE)) {
@@ -38,7 +38,7 @@ class MuseumJSONStore(private val context: Context) : MuseumStore {
         }
     }
 
-    override fun findAll(): MutableList<MuseumModel> {
+    override fun findAll(): ArrayList<MuseumModel> {
         logAll()
         return museums
     }

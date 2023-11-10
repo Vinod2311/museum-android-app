@@ -92,6 +92,6 @@ class AllMuseumLocationsView : AppCompatActivity(), GoogleMap.OnMarkerClickListe
     fun updateCard(museum: MuseumModel) {
         binding.cardView.name.text = museum!!.name
         binding.cardView.category.text = museum!!.category
-        Picasso.get().load(museum.image).into(binding.cardView.imageIcon)
+        Picasso.get().load(museum.image[0]).into(binding.cardView.imageIcon)
     }
 }

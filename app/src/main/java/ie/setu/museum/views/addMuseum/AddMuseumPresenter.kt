@@ -82,13 +82,31 @@ class AddMuseumPresenter(private val view: AddMuseumView) {
             { result ->
                 when(result.resultCode){
                     AppCompatActivity.RESULT_OK -> {
-                        if (result.data != null) {
-                            Timber.i("Got Result ${result.data!!.data}")
-                            museum.image = result.data!!.data!!
-                            view.contentResolver.takePersistableUriPermission(museum.image,
-                                Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                            view.updateImage(museum.image)
-                        } // end of if
+                        if (result.data!!.clipData != null) {
+                            Timber.i("Got Result ${result.data!!.clipData}")
+                            var count:Int = result.data!!.clipData!!.itemCount
+                            var currentItem = 0
+                            museum.image.clear()
+                            while (currentItem < count) {
+                                museum.image.add(result.data!!.clipData!!.getItemAt(currentItem).uri)
+                                view.contentResolver.takePersistableUriPermission(
+                                    museum.image[currentItem],
+                                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                )
+                                currentItem += 1
+                            }
+                            view.updateImage(museum.image[0])
+                        } else if(result.data != null) {
+                            Timber.i("Got Result ${result!!.data!!.data}")
+                            museum.image.clear()
+                            museum.image.add(result.data!!.data!!)
+                            val dummy = museum.image[0]
+                            view.contentResolver.takePersistableUriPermission(
+                                museum.image[0],
+                                Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            )
+                            view.updateImage(museum.image[0])
+                        }
                     }
                     AppCompatActivity.RESULT_CANCELED -> { } else -> { }
                 }
