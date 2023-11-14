@@ -2,7 +2,7 @@ package ie.setu.museum.views.museumDetails
 
 import com.denzcoskun.imageslider.models.SlideModel
 import ie.setu.museum.main.MainApp
-import ie.setu.museum.models.MuseumModel
+import ie.setu.museum.models.museum.MuseumModel
 
 class MuseumDetailsPresenter(private val view: MuseumDetailsView) {
 

@@ -7,8 +7,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import ie.setu.museum.helpers.showImagePicker
 import ie.setu.museum.main.MainApp
-import ie.setu.museum.models.Location
-import ie.setu.museum.models.MuseumModel
+import ie.setu.museum.models.museum.Location
+import ie.setu.museum.models.museum.MuseumModel
 import ie.setu.museum.views.editLocation.EditLocationView
 import timber.log.Timber
 
@@ -30,9 +30,10 @@ class AddMuseumPresenter(private val view: AddMuseumView) {
          registerMapCallback()
     }
 
-    fun doAddOrSave(name: String,description: String,category: String, rating: Float ){
+    fun doAddOrSave(name: String,description: String,category: String, review: String, rating: Float ){
         museum.name = name
         museum.shortDescription = description
+        museum.review = review
         museum.rating = rating
         museum.category = category
         if (edit) {
@@ -60,11 +61,12 @@ class AddMuseumPresenter(private val view: AddMuseumView) {
         mapIntentLauncher.launch(launcherIntent)
     }
 
-    fun cacheMuseum(name: String,description: String,category: String, rating: Float){
+    fun cacheMuseum(name: String,description: String,category: String, review: String, rating: Float){
         museum.name = name
         museum.shortDescription = description
         museum.category = category
         museum.rating = rating
+        museum.review = review
     }
 
     fun doCancel() {

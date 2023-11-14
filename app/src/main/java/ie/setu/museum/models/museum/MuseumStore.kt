@@ -1,4 +1,4 @@
-package ie.setu.museum.models
+package ie.setu.museum.models.museum
 
 interface MuseumStore {
     fun findAll(): ArrayList<MuseumModel>

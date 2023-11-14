@@ -5,7 +5,8 @@ import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import ie.setu.museum.main.MainApp
-import ie.setu.museum.models.MuseumModel
+import ie.setu.museum.models.museum.MuseumModel
+import ie.setu.museum.views.account.AccountView
 import ie.setu.museum.views.addMuseum.AddMuseumView
 import ie.setu.museum.views.allMuseumLocations.AllMuseumLocationsView
 import ie.setu.museum.views.museumDetails.MuseumDetailsView
@@ -53,9 +54,14 @@ class MuseumHomePresenter(private val view: MuseumHomeView) {
         refreshIntentLauncher.launch(launchIntent)
     }
 
-    fun doShowMuseum(museum:MuseumModel) {
+    fun doShowMuseum(museum: MuseumModel) {
         val launchIntent = Intent(view, MuseumDetailsView::class.java)
         launchIntent.putExtra("museum", museum)
+        refreshIntentLauncher.launch(launchIntent)
+    }
+
+    fun doShowAccount(){
+        val launchIntent = Intent(view, AccountView::class.java)
         refreshIntentLauncher.launch(launchIntent)
     }
 

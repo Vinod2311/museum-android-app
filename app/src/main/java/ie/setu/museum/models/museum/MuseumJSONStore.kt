@@ -1,4 +1,4 @@
-package ie.setu.museum.models
+package ie.setu.museum.models.museum
 
 import android.content.Context
 import android.net.Uri
@@ -50,6 +50,7 @@ class MuseumJSONStore(private val context: Context) : MuseumStore {
     }
 
 
+
     override fun update(museum: MuseumModel) {
         var foundMuseum: MuseumModel? = museums.find { p -> p.id == museum.id }
         if (foundMuseum != null){
@@ -61,6 +62,7 @@ class MuseumJSONStore(private val context: Context) : MuseumStore {
             foundMuseum.lng = museum.lng
             foundMuseum.zoom = museum.zoom
             foundMuseum.rating = museum.rating
+            foundMuseum.review = museum.review
             logAll()
             serialize()
         }

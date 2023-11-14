@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import ie.setu.museum.R
 import ie.setu.museum.databinding.ActivityMuseumHomeViewBinding
-import ie.setu.museum.models.MuseumModel
+import ie.setu.museum.models.museum.MuseumModel
 import timber.log.Timber
 
 
@@ -68,7 +68,9 @@ class MuseumHomeView : AppCompatActivity(), MuseumListener {
             R.id.map -> {
                 presenter.doShowMuseumsMap()
             }
-            R.id.account -> { }
+            R.id.account -> {
+                presenter.doShowAccount()
+            }
         }
         return super.onOptionsItemSelected(item)
     }

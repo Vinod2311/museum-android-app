@@ -10,7 +10,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import ie.setu.museum.R
 import ie.setu.museum.databinding.ActivityAddMuseumBinding
-import ie.setu.museum.models.MuseumModel
+import ie.setu.museum.models.museum.MuseumModel
 import timber.log.Timber
 
 class AddMuseumView : AppCompatActivity() {
@@ -33,12 +33,12 @@ class AddMuseumView : AppCompatActivity() {
         presenter = AddMuseumPresenter(this)
 
         binding.chooseImage.setOnClickListener{
-            presenter.cacheMuseum(binding.nameText.text.toString(),binding.shortDescriptionText.text.toString(),binding.category.text.toString(), binding.ratingBar.rating)
+            presenter.cacheMuseum(binding.nameText.text.toString(),binding.shortDescriptionText.text.toString(),binding.category.text.toString(), binding.reviewText.text.toString(), binding.ratingBar.rating)
             presenter.doSelectImage()
         }
 
         binding.location.setOnClickListener{
-            presenter.cacheMuseum(binding.nameText.text.toString(),binding.shortDescriptionText.text.toString(),binding.category.text.toString(), binding.ratingBar.rating)
+            presenter.cacheMuseum(binding.nameText.text.toString(),binding.shortDescriptionText.text.toString(),binding.category.text.toString(), binding.reviewText.text.toString(), binding.ratingBar.rating)
             presenter.doSetLocation()
         }
 
@@ -58,8 +58,8 @@ class AddMuseumView : AppCompatActivity() {
                     Snackbar.make(binding.root, "Please enter museum name", Snackbar.LENGTH_LONG)
                         .show()
                 } else {
-                    presenter.cacheMuseum(binding.nameText.text.toString(), binding.shortDescriptionText.text.toString(),binding.category.text.toString(), binding.ratingBar.rating)
-                    presenter.doAddOrSave(binding.nameText.text.toString(), binding.shortDescriptionText.text.toString(),binding.category.text.toString(), binding.ratingBar.rating)
+                    presenter.cacheMuseum(binding.nameText.text.toString(), binding.shortDescriptionText.text.toString(),binding.category.text.toString(), binding.reviewText.text.toString(), binding.ratingBar.rating)
+                    presenter.doAddOrSave(binding.nameText.text.toString(), binding.shortDescriptionText.text.toString(),binding.category.text.toString(), binding.reviewText.text.toString(), binding.ratingBar.rating)
                 }
             }
             R.id.item_delete -> {
@@ -77,6 +77,7 @@ class AddMuseumView : AppCompatActivity() {
         binding.shortDescriptionText.setText(museum.shortDescription)
         binding.category.setText(museum.category,false)
         binding.ratingBar.rating = museum.rating
+        binding.reviewText.setText(museum.review)
 
         Picasso.get()
             .load(museum.image[0])

@@ -8,7 +8,7 @@ import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.models.SlideModel
 import ie.setu.museum.R
 import ie.setu.museum.databinding.ActivityMuseumDetailsBinding
-import ie.setu.museum.models.MuseumModel
+import ie.setu.museum.models.museum.MuseumModel
 
 class MuseumDetailsView : AppCompatActivity() {
 
@@ -47,6 +47,7 @@ class MuseumDetailsView : AppCompatActivity() {
         binding.descriptionText.text = museum.shortDescription
         binding.categoryText.text = museum.category
         binding.ratingBar.rating = museum.rating
+        binding.reviewText.text = museum.review
 
     }
 }

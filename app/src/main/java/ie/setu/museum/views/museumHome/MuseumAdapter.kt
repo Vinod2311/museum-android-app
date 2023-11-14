@@ -7,7 +7,7 @@ import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import ie.setu.museum.databinding.CardMuseumBinding
-import ie.setu.museum.models.MuseumModel
+import ie.setu.museum.models.museum.MuseumModel
 import java.util.Locale
 
 interface MuseumListener {
@@ -15,7 +15,7 @@ interface MuseumListener {
     fun onEditMuseumClick(museum: MuseumModel, position: Int)
 }
 
-class MuseumAdapter constructor( private var museums: ArrayList<MuseumModel>, private val listener: MuseumListener) :
+class MuseumAdapter constructor(private var museums: ArrayList<MuseumModel>, private val listener: MuseumListener) :
     RecyclerView.Adapter<MuseumAdapter.MainHolder>(), Filterable {
 
     private val completeList = museums

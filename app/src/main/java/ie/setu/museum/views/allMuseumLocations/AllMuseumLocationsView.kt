@@ -10,7 +10,7 @@ import com.google.android.gms.maps.model.Marker
 import com.squareup.picasso.Picasso
 import ie.setu.museum.R
 import ie.setu.museum.databinding.ActivityAllMuseumLocationsViewBinding
-import ie.setu.museum.models.MuseumModel
+import ie.setu.museum.models.museum.MuseumModel
 
 
 class AllMuseumLocationsView : AppCompatActivity(), GoogleMap.OnMarkerClickListener {
