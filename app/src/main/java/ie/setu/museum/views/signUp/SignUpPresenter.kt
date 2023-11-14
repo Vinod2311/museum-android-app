@@ -10,9 +10,6 @@ class SignUpPresenter(val view: SignUpView) {
     var user = UserModel()
     var app: MainApp = view.application as MainApp
 
-    init{
-
-    }
 
     fun doAddUser(firstName:String, lastName:String, email:String, password:String) {
         val user = UserModel(firstName=firstName, lastName = lastName, email = email, password = password)

@@ -36,7 +36,7 @@ class SignUpView : AppCompatActivity() {
 
             override fun updateDrawState(ds: TextPaint) {
                 super.updateDrawState(ds)
-                ds.setColor(Color.BLUE)
+                ds.color = Color.BLUE
                 ds.isUnderlineText=true
             }
         }
@@ -48,7 +48,15 @@ class SignUpView : AppCompatActivity() {
         binding.loginText.highlightColor = Color.TRANSPARENT
 
         binding.signUp.setOnClickListener{
-            presenter.doAddUser(binding.firstNameText.text.toString(),binding.lastNameText.text.toString(),binding.emailText.text.toString(),binding.passwordText.text.toString())}
+            if (binding.emailText.text.toString().isNotEmpty() && binding.passwordText.text.toString().isNotEmpty()){
+                presenter.doAddUser(binding.firstNameText.text.toString(),binding.lastNameText.text.toString(),binding.emailText.text.toString(),binding.passwordText.text.toString())
+            } else if (binding.emailText.text.toString().isEmpty()){
+                binding.email.error = "Email is required"
+
+            } else if (binding.passwordText.text.toString().isEmpty()){
+                binding.password.error = "Password is required"
+            }
+            }
 
     }
 

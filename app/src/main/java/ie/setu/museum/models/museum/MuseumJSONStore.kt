@@ -14,6 +14,7 @@ import com.google.gson.reflect.TypeToken
 import ie.setu.museum.helpers.exists
 import ie.setu.museum.helpers.read
 import ie.setu.museum.helpers.write
+import ie.setu.museum.models.user.UserModel
 import timber.log.Timber
 import java.lang.reflect.Type
 import java.util.Random
@@ -63,6 +64,7 @@ class MuseumJSONStore(private val context: Context) : MuseumStore {
             foundMuseum.zoom = museum.zoom
             foundMuseum.rating = museum.rating
             foundMuseum.review = museum.review
+            foundMuseum.user = museum.user
             logAll()
             serialize()
         }
@@ -80,6 +82,11 @@ class MuseumJSONStore(private val context: Context) : MuseumStore {
 
     override fun findById(id: Long): MuseumModel? {
         return museums.find { p -> p.id == id }
+    }
+
+    override fun findUserMuseums(user: UserModel): List<MuseumModel> {
+        var foundMuseums: List<MuseumModel> = museums.filter{ p -> p.user.id == user.id}
+        return foundMuseums
     }
 
     private fun serialize() {
