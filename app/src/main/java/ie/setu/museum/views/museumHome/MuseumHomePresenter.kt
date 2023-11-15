@@ -6,6 +6,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import ie.setu.museum.main.MainApp
 import ie.setu.museum.models.museum.MuseumModel
+import ie.setu.museum.models.user.UserModel
 import ie.setu.museum.views.account.AccountView
 import ie.setu.museum.views.addMuseum.AddMuseumView
 import ie.setu.museum.views.allMuseumLocations.AllMuseumLocationsView
@@ -17,6 +18,7 @@ class MuseumHomePresenter(private val view: MuseumHomeView) {
     private lateinit var refreshIntentLauncher : ActivityResultLauncher<Intent>
     private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
     private var position: Int = 0
+    lateinit var loggedInUser: UserModel
 
 
     init {
@@ -44,12 +46,16 @@ class MuseumHomePresenter(private val view: MuseumHomeView) {
 
     fun doAddMuseum() {
         val launchIntent = Intent(view, AddMuseumView::class.java)
+        loggedInUser= view.intent.extras?.getParcelable("user")!!
+        launchIntent.putExtra("user",loggedInUser)
         refreshIntentLauncher.launch(launchIntent)
     }
 
     fun doEditMuseum(museum: MuseumModel, pos: Int) {
         val launchIntent = Intent(view, AddMuseumView::class.java)
         launchIntent.putExtra("museum_edit", museum)
+        loggedInUser= view.intent.extras?.getParcelable("user")!!
+        launchIntent.putExtra("user",loggedInUser)
         position = pos
         refreshIntentLauncher.launch(launchIntent)
     }
@@ -62,6 +68,8 @@ class MuseumHomePresenter(private val view: MuseumHomeView) {
 
     fun doShowAccount(){
         val launchIntent = Intent(view, AccountView::class.java)
+        loggedInUser= view.intent.extras?.getParcelable("user")!!
+        launchIntent.putExtra("user",loggedInUser)
         refreshIntentLauncher.launch(launchIntent)
     }
 

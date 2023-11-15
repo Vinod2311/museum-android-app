@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
 import com.squareup.picasso.Picasso
@@ -38,8 +39,7 @@ class AllMuseumLocationsView : AppCompatActivity(), GoogleMap.OnMarkerClickListe
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_secondary, menu)
-        val saveMenu: MenuItem = menu.findItem(R.id.item_save)
-        saveMenu.isVisible = false
+        binding.cardView.editButton.isVisible = false
         return super.onCreateOptionsMenu(menu)
     }
 

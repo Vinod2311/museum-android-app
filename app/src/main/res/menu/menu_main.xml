@@ -6,14 +6,17 @@
     <item
         android:id="@+id/map"
         android:icon="@android:drawable/ic_menu_mapmode"
-        android:title="map_button"
+
+        android:iconTintMode="multiply"
+        android:title="@string/map_button"
         app:showAsAction="ifRoom" />
 
     <!-- Settings, must always be in the overflow. -->
     <item
         android:id="@+id/account"
         android:icon="@android:drawable/ic_menu_myplaces"
-        android:title="account_button"
+        android:title="@string/account_button"
+
         app:showAsAction="ifRoom" />
 
 

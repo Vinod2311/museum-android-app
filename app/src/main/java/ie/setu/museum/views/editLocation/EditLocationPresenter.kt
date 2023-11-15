@@ -8,20 +8,23 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import ie.setu.museum.models.museum.Location
+import ie.setu.museum.models.museum.MuseumModel
 import ie.setu.museum.views.editLocation.EditLocationView
 
 class EditLocationPresenter (val view: EditLocationView) {
 
     var location = Location()
+    var museum : MuseumModel
 
     init {
         location = view.intent.extras?.getParcelable<Location>("location")!!
+        museum = view.intent.extras?.getParcelable<MuseumModel>("museum")!!
     }
 
     fun initMap(map: GoogleMap) {
         val loc = LatLng(location.lat, location.lng)
         val options = MarkerOptions()
-            .title("Museum")
+            .title(museum.name)
             .snippet("GPS : $loc")
             .draggable(true)
             .position(loc)
@@ -47,5 +50,12 @@ class EditLocationPresenter (val view: EditLocationView) {
     fun doUpdateMarker(marker: Marker) {
         val loc = LatLng(location.lat, location.lng)
         marker.snippet = "GPS : $loc"
+    }
+
+    fun doConfirm(){
+        val resultIntent = Intent()
+        resultIntent.putExtra("location", location)
+        view.setResult(Activity.RESULT_OK, resultIntent)
+        view.finish()
     }
 }

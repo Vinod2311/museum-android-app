@@ -6,6 +6,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import ie.setu.museum.R
 import ie.setu.museum.databinding.ActivityAccountViewBinding
+import ie.setu.museum.models.museum.MuseumModel
 import ie.setu.museum.models.user.UserModel
 
 class AccountView : AppCompatActivity() {
@@ -42,9 +43,10 @@ class AccountView : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun showUserDetails(user: UserModel){
+    fun showUserDetails(user: UserModel,userMuseums: List<MuseumModel>){
         binding.userFirstName.text = user.firstName
         binding.userLastName.text = user.lastName
         binding.userEmail.text = user.email
+        binding.totalMuseums.text = userMuseums.size.toString()
     }
 }

@@ -12,10 +12,11 @@ class LoginPresenter(private val view: LoginView) {
     fun doLogin(email: String, password: String){
         var foundUser = app.users.findByEmail(email)
         if (foundUser == null){
-            Snackbar.make(view.binding.root, "No User found", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(view.binding.root, "No User with given email found", Snackbar.LENGTH_LONG).show()
         } else {
             if (password == foundUser?.password) {
                 val intent = Intent(view, MuseumHomeView::class.java)
+                intent.putExtra("user",foundUser)
                 view.startActivity(intent)
                 view.finish()
             } else{

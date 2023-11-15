@@ -57,7 +57,7 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".views.museumHome.MuseumHomeView"
-            android:exported="false"></activity>
+            android:exported="false" />
     </application>
 
 </manifest>

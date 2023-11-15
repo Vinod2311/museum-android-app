@@ -27,8 +27,6 @@ class MuseumDetailsView : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_secondary, menu)
-        val saveMenu: MenuItem = menu.findItem(R.id.item_save)
-        saveMenu.isVisible = false
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -43,7 +41,9 @@ class MuseumDetailsView : AppCompatActivity() {
 
     fun showMuseum(imageList: ArrayList<SlideModel>, museum : MuseumModel){
         binding.titlebar.text = museum.name
-        binding.imageSlider.setImageList(imageList, ScaleTypes.CENTER_CROP)
+        if (imageList.isNotEmpty()){
+            binding.imageSlider.setImageList(imageList, ScaleTypes.CENTER_CROP)
+        }
         binding.descriptionText.text = museum.shortDescription
         binding.categoryText.text = museum.category
         binding.ratingBar.rating = museum.rating

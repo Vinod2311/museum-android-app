@@ -56,8 +56,9 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="40dp"
         android:scrollbars="vertical"
+        android:paddingBottom="10dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintBottom_toTopOf="@+id/appBarLayout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,10 +75,11 @@
         android:layout_margin="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="Add Museum"
+        android:text="@string/add_museum"
+        app:icon="@android:drawable/ic_input_add"
         app:layout_constraintBottom_toTopOf="@+id/appBarLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:icon="@android:drawable/ic_input_add" />
+         />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

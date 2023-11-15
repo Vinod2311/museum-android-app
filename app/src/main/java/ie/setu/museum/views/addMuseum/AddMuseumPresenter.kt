@@ -2,13 +2,16 @@ package ie.setu.museum.views.addMuseum
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.net.Uri
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.denzcoskun.imageslider.models.SlideModel
 import ie.setu.museum.helpers.showImagePicker
 import ie.setu.museum.main.MainApp
 import ie.setu.museum.models.museum.Location
 import ie.setu.museum.models.museum.MuseumModel
+import ie.setu.museum.models.user.UserModel
 import ie.setu.museum.views.editLocation.EditLocationView
 import timber.log.Timber
 
@@ -19,12 +22,19 @@ class AddMuseumPresenter(private val view: AddMuseumView) {
     private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
     private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
     var edit = false;
+    val imageList = ArrayList<SlideModel>()
+    lateinit var loggedInUser: UserModel
 
     init {
         if (view.intent.hasExtra("museum_edit")) {
             edit = true
             museum = view.intent.extras?.getParcelable("museum_edit")!!
-            view.showMuseum(museum)
+            if (museum.image[0] != Uri.EMPTY) {
+                for (x in museum.image) {
+                    imageList.add(SlideModel(x.toString()))
+                }
+            }
+            view.showMuseum(imageList,museum)
         }
          registerImagePickerCallback()
          registerMapCallback()
@@ -36,6 +46,8 @@ class AddMuseumPresenter(private val view: AddMuseumView) {
         museum.review = review
         museum.rating = rating
         museum.category = category
+        loggedInUser= view.intent.extras?.getParcelable("user")!!
+        museum.user = loggedInUser
         if (edit) {
             app.museums.update(museum)
         } else {
@@ -58,6 +70,7 @@ class AddMuseumPresenter(private val view: AddMuseumView) {
         }
         val launcherIntent = Intent(view, EditLocationView::class.java)
             .putExtra("location", location)
+            .putExtra("museum",museum)
         mapIntentLauncher.launch(launcherIntent)
     }
 
@@ -89,6 +102,7 @@ class AddMuseumPresenter(private val view: AddMuseumView) {
                             var count:Int = result.data!!.clipData!!.itemCount
                             var currentItem = 0
                             museum.image.clear()
+                            imageList.clear()
                             while (currentItem < count) {
                                 museum.image.add(result.data!!.clipData!!.getItemAt(currentItem).uri)
                                 view.contentResolver.takePersistableUriPermission(
@@ -97,17 +111,21 @@ class AddMuseumPresenter(private val view: AddMuseumView) {
                                 )
                                 currentItem += 1
                             }
-                            view.updateImage(museum.image[0])
+                            for (x in museum.image) {
+                                imageList.add(SlideModel(x.toString(), "some text"))
+                            }
+                            view.updateImage(imageList)
                         } else if(result.data != null) {
                             Timber.i("Got Result ${result!!.data!!.data}")
                             museum.image.clear()
                             museum.image.add(result.data!!.data!!)
-                            val dummy = museum.image[0]
+                            imageList.clear()
                             view.contentResolver.takePersistableUriPermission(
                                 museum.image[0],
                                 Intent.FLAG_GRANT_READ_URI_PERMISSION
                             )
-                            view.updateImage(museum.image[0])
+                            imageList.add(SlideModel(museum.image[0].toString()))
+                            view.updateImage(imageList)
                         }
                     }
                     AppCompatActivity.RESULT_CANCELED -> { } else -> { }

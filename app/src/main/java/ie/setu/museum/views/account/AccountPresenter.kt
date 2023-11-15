@@ -11,11 +11,12 @@ class AccountPresenter(private val view:AccountView) {
     var user = UserModel()
 
     init {
-        user = app.users.findByEmail("homer@simpson.com")!!
+        user = view.intent.extras?.getParcelable("user")!!
     }
 
     fun doUpdateAccount(){
-        view.showUserDetails(user)
+        var userMuseums = app.museums.findUserMuseums(user)
+        view.showUserDetails(user,userMuseums)
     }
 
     fun doCancel() {

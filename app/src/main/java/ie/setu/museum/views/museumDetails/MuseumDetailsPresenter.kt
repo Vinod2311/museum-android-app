@@ -1,5 +1,6 @@
 package ie.setu.museum.views.museumDetails
 
+import android.net.Uri
 import com.denzcoskun.imageslider.models.SlideModel
 import ie.setu.museum.main.MainApp
 import ie.setu.museum.models.museum.MuseumModel
@@ -13,10 +14,13 @@ class MuseumDetailsPresenter(private val view: MuseumDetailsView) {
     init{
         app = view.application as MainApp
         museum = view.intent.extras?.getParcelable("museum")!!
-        //val url = URL(museum.image.toString())
-        for (x in museum.image) {
-            imageList.add(SlideModel(x.toString(), "some text"))
+
+        if (museum.image[0] != Uri.EMPTY) {
+            for (x in museum.image) {
+                imageList.add(SlideModel(x.toString()))
+            }
         }
+
         view.showMuseum(imageList,museum)
     }
 

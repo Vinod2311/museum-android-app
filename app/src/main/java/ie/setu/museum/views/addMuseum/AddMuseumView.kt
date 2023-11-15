@@ -6,8 +6,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.snackbar.Snackbar
-import com.squareup.picasso.Picasso
+import com.denzcoskun.imageslider.constants.ScaleTypes
+import com.denzcoskun.imageslider.models.SlideModel
 import ie.setu.museum.R
 import ie.setu.museum.databinding.ActivityAddMuseumBinding
 import ie.setu.museum.models.museum.MuseumModel
@@ -42,26 +42,36 @@ class AddMuseumView : AppCompatActivity() {
             presenter.doSetLocation()
         }
 
+        binding.createButton.setOnClickListener{
+
+            if (binding.nameText.text.toString().isNotEmpty() && binding.category.text.toString().isNotEmpty()){
+                presenter.cacheMuseum(binding.nameText.text.toString(), binding.shortDescriptionText.text.toString(),binding.category.text.toString(), binding.reviewText.text.toString(), binding.ratingBar.rating)
+                presenter.doAddOrSave(binding.nameText.text.toString(), binding.shortDescriptionText.text.toString(),binding.category.text.toString(), binding.reviewText.text.toString(), binding.ratingBar.rating)
+            } else if (binding.nameText.text.toString().isEmpty()){
+                binding.name.error = "Museum name is required"
+
+            } else if (binding.category.text.toString().isEmpty()){
+                binding.categoryLayout.error = "Category is required"
+            }
+
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_secondary, menu)
         val deleteMenu: MenuItem = menu.findItem(R.id.item_delete)
         deleteMenu.isVisible = presenter.edit
+        if(presenter.edit){
+            binding.createButton.setText(R.string.save_changes)
+            binding.name.isHelperTextEnabled = false
+            binding.categoryLayout.isHelperTextEnabled = false
+        }
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.item_save -> {
-                if (binding.nameText.toString().isEmpty()) {
-                    Snackbar.make(binding.root, "Please enter museum name", Snackbar.LENGTH_LONG)
-                        .show()
-                } else {
-                    presenter.cacheMuseum(binding.nameText.text.toString(), binding.shortDescriptionText.text.toString(),binding.category.text.toString(), binding.reviewText.text.toString(), binding.ratingBar.rating)
-                    presenter.doAddOrSave(binding.nameText.text.toString(), binding.shortDescriptionText.text.toString(),binding.category.text.toString(), binding.reviewText.text.toString(), binding.ratingBar.rating)
-                }
-            }
             R.id.item_delete -> {
                 presenter.doDelete()
             }
@@ -72,27 +82,24 @@ class AddMuseumView : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun showMuseum(museum: MuseumModel) {
+    fun showMuseum(imageList: ArrayList<SlideModel>, museum: MuseumModel) {
         binding.nameText.setText(museum.name)
         binding.shortDescriptionText.setText(museum.shortDescription)
         binding.category.setText(museum.category,false)
         binding.ratingBar.rating = museum.rating
         binding.reviewText.setText(museum.review)
+        if (imageList.isNotEmpty())
+            binding.imageView.setImageList(imageList, ScaleTypes.CENTER_CROP)
+        if (museum.image[0] != Uri.EMPTY) {
+            binding.chooseImage.setText(R.string.change_image)
 
-        Picasso.get()
-            .load(museum.image[0])
-            .into(binding.imageView)
-        if (museum.image != Uri.EMPTY) {
-            binding.chooseImage.setText("Change Image")
         }
     }
 
-    fun updateImage(image: Uri) {
+    fun updateImage(imageList: ArrayList<SlideModel>) {
         Timber.i("Image updated")
-        Picasso.get()
-            .load(image)
-            .into(binding.imageView)
-        binding.chooseImage.setText("Change Image")
+        binding.imageView.setImageList(imageList, ScaleTypes.CENTER_CROP)
+        binding.chooseImage.setText(R.string.change_image)
     }
 
 

@@ -36,7 +36,7 @@ class LoginView : AppCompatActivity() {
 
             override fun updateDrawState(ds: TextPaint) {
                 super.updateDrawState(ds)
-                ds.setColor(Color.BLUE)
+                ds.color = Color.BLUE
                 ds.isUnderlineText=true
             }
         }
@@ -46,9 +46,17 @@ class LoginView : AppCompatActivity() {
         binding.signupText.text = ss
         binding.signupText.movementMethod = LinkMovementMethod.getInstance()
         binding.signupText.highlightColor = Color.TRANSPARENT
+
         binding.login.setOnClickListener {
-            presenter.doLogin(binding.emailText.text.toString(),binding.passwordText.text.toString())
-        }
+            if (binding.emailText.text.toString().isNotEmpty() && binding.passwordText.text.toString().isNotEmpty()){
+                presenter.doLogin(binding.emailText.text.toString(),binding.passwordText.text.toString())
+            } else if (binding.emailText.text.toString().isEmpty()){
+                binding.email.error = "Email is required"
+
+            } else if (binding.passwordText.text.toString().isEmpty()){
+                binding.password.error = "Password is required"
+            }
+            }
 
     }
 
