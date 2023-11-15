@@ -63,7 +63,7 @@ class AddMuseumView : AppCompatActivity() {
         val deleteMenu: MenuItem = menu.findItem(R.id.item_delete)
         deleteMenu.isVisible = presenter.edit
         if(presenter.edit){
-            binding.createButton.text = R.string.save_changes.toString()
+            binding.createButton.setText(R.string.save_changes)
             binding.name.isHelperTextEnabled = false
             binding.categoryLayout.isHelperTextEnabled = false
         }
@@ -91,7 +91,7 @@ class AddMuseumView : AppCompatActivity() {
         if (imageList.isNotEmpty())
             binding.imageView.setImageList(imageList, ScaleTypes.CENTER_CROP)
         if (museum.image[0] != Uri.EMPTY) {
-            binding.chooseImage.text = R.string.change_image.toString()
+            binding.chooseImage.setText(R.string.change_image)
 
         }
     }
@@ -99,7 +99,7 @@ class AddMuseumView : AppCompatActivity() {
     fun updateImage(imageList: ArrayList<SlideModel>) {
         Timber.i("Image updated")
         binding.imageView.setImageList(imageList, ScaleTypes.CENTER_CROP)
-        binding.chooseImage.text = R.string.change_image.toString()
+        binding.chooseImage.setText(R.string.change_image)
     }
 
 
