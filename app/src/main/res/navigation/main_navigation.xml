@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/museumListFragment">
+
+    <fragment
+        android:id="@+id/addMuseumFragment"
+        android:name="ie.setu.museum.ui.addMuseum.AddMuseumFragment"
+        android:label="Add Museum"
+        tools:layout="@layout/fragment_add_museum" >
+        <action
+            android:id="@+id/action_addMuseumFragment_to_museumListFragment"
+            app:destination="@id/museumListFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+        <argument
+            android:name="museumId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="empty" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/museumListFragment"
+        android:name="ie.setu.museum.ui.museumList.MuseumListFragment"
+        android:label="My Museums"
+        tools:layout="@layout/fragment_museum_list" >
+        <action
+            android:id="@+id/action_museumListFragment_to_addMuseumFragment"
+            app:destination="@id/addMuseumFragment"
+            app:popUpTo="@id/main_navigation"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_museumListFragment_to_museumDetailsFragment"
+            app:destination="@id/museumDetailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_museumListFragment_to_account"
+            app:destination="@id/account" />
+        <action
+            android:id="@+id/action_museumListFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/museumDetailsFragment"
+        android:name="ie.setu.museum.ui.museumDetails.MuseumDetailsFragment"
+        android:label="Museum Detail" >
+        <action
+            android:id="@+id/action_museumDetailsFragment_to_museumListFragment"
+            app:destination="@id/museumListFragment" />
+        <argument
+            android:name="museumId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
+    </fragment>
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="ie.setu.museum.ui.account.AccountFragment"
+        android:label="Account"
+        tools:layout="@layout/fragment_account" >
+        <action
+            android:id="@+id/action_account_to_museumListFragment"
+            app:destination="@id/museumListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="ie.setu.museum.ui.allMuseumLocations.MapsFragment"
+        android:label="Map of museums"
+        tools:layout="@layout/fragment_maps" >
+        <action
+            android:id="@+id/action_mapsFragment_to_museumDetailsFragment"
+            app:destination="@id/museumDetailsFragment" />
+    </fragment>
+
+</navigation>

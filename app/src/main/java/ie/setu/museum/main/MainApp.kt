@@ -1,12 +1,7 @@
 package ie.setu.museum.main
 
 import android.app.Application
-import android.net.Uri
-import ie.setu.museum.models.museum.MuseumJSONStore
-import ie.setu.museum.models.museum.MuseumModel
 import ie.setu.museum.models.museum.MuseumStore
-import ie.setu.museum.models.museum.UserJSONStore
-import ie.setu.museum.models.user.UserModel
 import ie.setu.museum.models.user.UserStore
 import timber.log.Timber
 import timber.log.Timber.Forest.i
@@ -19,12 +14,12 @@ class MainApp : Application() {
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
-        museums = MuseumJSONStore(applicationContext)
-        users = UserJSONStore(applicationContext)
+        //museums = MuseumJSONStore(applicationContext)
+        //users = UserJSONStore(applicationContext)
         i("Museum app starting")
-        fillJSONStore()
+        //fillJSONStore()
     }
-
+/*
     private fun fillJSONStore(){
         users.deleteAll()
         val user1 = UserModel(firstName = "Homer", lastName = "Simpson", email = "homer@simpson.com", password = "secret")
@@ -62,7 +57,7 @@ class MainApp : Application() {
             lat = 53.34434, lng = -6.29982, zoom = 15f, image = arrayListOf(
                 Uri.parse("content://com.android.providers.media.documents/document/image%3A1000040373"),
                 Uri.parse("content://com.android.providers.media.documents/document/image%3A1000040653")))
-        val museum4 = MuseumModel(user=user1, name = "National Maritime Museum of Ireland", category = "History", rating = 2.0f,
+        val museum4 = MuseumModel(user=user2, name = "National Maritime Museum of Ireland", category = "History", rating = 2.0f,
             shortDescription = "An array of exhibits on maritime history showcased in a church built for seafarers in 1837.",
             review = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, " +
                     "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum " +
@@ -71,7 +66,7 @@ class MainApp : Application() {
                 Uri.parse("content://com.android.providers.media.documents/document/image%3A1000040657"),
                 Uri.parse("content://com.android.providers.media.documents/document/image%3A1000040376"),
                 Uri.parse("content://com.android.providers.media.documents/document/image%3A1000040656")))
-        val museum5 = MuseumModel(user=user1, name = "The National 1798 Rebellion Centre", category = "History", rating = 3.0f,
+        val museum5 = MuseumModel(user=user3, name = "The National 1798 Rebellion Centre", category = "History", rating = 3.0f,
             shortDescription = "Hands-on, multi-media exhibits & reenactments tracing the events of the 1798 Irish Rebellion.",
             review = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, " +
                     "quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum " +
@@ -85,4 +80,6 @@ class MainApp : Application() {
 
 
     }
+
+ */
 }

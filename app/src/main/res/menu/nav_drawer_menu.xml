@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/addMuseumFragment"
+            android:icon="@drawable/ic_menu_add"
+            android:title="Add Museum" />
+        <item
+            android:id="@+id/museumListFragment"
+            android:icon="@drawable/ic_menu_list"
+            android:title="Museum List" />
+        <item
+            android:id="@+id/accountFragment"
+            android:icon="@drawable/ic_menu_account"
+            android:title="Account"/>
+        <item
+            android:id="@+id/changeTheme"
+            android:icon="@drawable/ic_menu_dark_mode"
+            android:title="Toggle Dark Mode"
+            app:actionLayout="@layout/togglebutton_layout"
+            app:showAsAction="always" />
+
+
+    </group>
+
+    <item android:title="@string/group_communicate">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/action_share" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/action_send" />
+        </menu>
+    </item>
+
+    <item android:title="Access Control">
+        <menu>
+            <item
+                android:id="@+id/nav_sign_out"
+                android:icon="@android:drawable/ic_menu_revert"
+                android:title="@string/sign_out"
+                android:onClick="signOut"
+              />
+        </menu>
+    </item>
+</menu>

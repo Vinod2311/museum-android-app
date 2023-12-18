@@ -2,8 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".main.MainApp"
@@ -15,12 +18,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Museum"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <!--
+             TODO: Before you run your application, you need a Google Maps API key.
+
+             To get one, follow the directions here:
+
+                https://developers.google.com/maps/documentation/android-sdk/get-api-key
+
+             Once you have your API key (it starts with "AIza"), define a new property in your
+             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
+             "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_api_key" />
+
         <activity
-            android:name=".views.account.AccountView"
+            android:name=".ui.home.Home"
+            android:exported="false"
+            android:configChanges="uiMode"/>
+        <activity
+            android:name=".ui.account.AccountView"
             android:exported="false" />
         <activity
-            android:name=".views.splashScreen.SplashScreenView"
+            android:name=".ui.splashScreen.SplashScreenView"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
@@ -30,33 +54,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".views.signUp.SignUpView"
+            android:name=".ui.auth.signUp.SignUp"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".views.login.LoginView"
+            android:name=".ui.auth.login.Login"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+        <!--
         <activity
-            android:name=".views.museumDetails.MuseumDetailsView"
+            android:name=".ui.allMuseumLocations.AllMuseumLocationsView"
             android:exported="false" />
+        -->
         <activity
-            android:name=".views.allMuseumLocations.AllMuseumLocationsView"
-            android:exported="false" />
-        <activity
-            android:name=".views.editLocation.EditLocationView"
-            android:exported="false" />
-
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="${MAPS_API_KEY}" />
-
-        <activity
-            android:name=".views.addMuseum.AddMuseumView"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".views.museumHome.MuseumHomeView"
+            android:name=".ui.editLocation.EditLocationView"
             android:exported="false" />
     </application>
 
