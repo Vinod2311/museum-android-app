@@ -54,14 +54,7 @@ class MapsViewModel(application: Application) : AndroidViewModel(application) {
             }
         Timber.i("MAP VM LOC : %s", currentLocation.value)
     }
-/*
-    fun updateCard(marker: Marker) {
-        val tag = marker.tag as MuseumModel
 
-        view.updateCard(museum!!)
-    }
-
- */
 
 
 }

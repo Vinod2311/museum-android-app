@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -21,16 +20,15 @@ import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.models.SlideModel
 import ie.setu.museum.R
 import ie.setu.museum.databinding.FragmentMuseumDetailsBinding
-import ie.setu.museum.ui.auth.login.LoggedInViewModel
 
 class MuseumDetailsFragment : Fragment() {
 
     private lateinit var viewModel: MuseumDetailsViewModel
-    private val loggedInViewModel : LoggedInViewModel by activityViewModels()
     private var _fragBinding: FragmentMuseumDetailsBinding? = null
     private val fragBinding get() = _fragBinding!!
-    val imageList = ArrayList<SlideModel>()
+    private val imageList = ArrayList<SlideModel>()
     private val args by navArgs<MuseumDetailsFragmentArgs>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,12 +44,9 @@ class MuseumDetailsFragment : Fragment() {
         val root = fragBinding.root
         setupMenu()
         fragBinding.museumDetailsVM = viewModel
-        //Toast.makeText(context,"Donation ID Selected : ${args.museumId}",Toast.LENGTH_LONG).show()
         viewModel.observableMuseum.observe(viewLifecycleOwner, Observer {
             showMuseum() })
         viewModel.getMuseum(args.museumId!!)
-
-
 
         return root
     }
@@ -74,18 +69,14 @@ class MuseumDetailsFragment : Fragment() {
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    fun showMuseum(){
+    private fun showMuseum(){
         fragBinding.museumDetailsVM = viewModel
-        //requireView().findNavController().currentDestination?.label = viewModel.observableMuseum.value?.name
         if (viewModel.observableMuseum.value?.images?.size != 0) {
             imageList.clear()
-
             //hideLoader(loader)
             for (x in viewModel.observableMuseum.value?.images!!) {
                 imageList.add(SlideModel(x))
             }
-            //imageList.add(SlideModel(FirebaseImageManager.imageUri.value?.get(0).toString()))
-            //Timber.i("Images updated")
             fragBinding.imageSlider.setImageList(imageList, ScaleTypes.CENTER_CROP)
 
         }

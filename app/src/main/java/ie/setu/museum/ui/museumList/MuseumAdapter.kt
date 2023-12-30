@@ -17,7 +17,6 @@ import java.util.Locale
 interface MuseumListener {
     fun onMuseumClick(museum: MuseumModel)
     fun onEditMuseumClick(museum: MuseumModel)
-    fun onFavouriteMuseumClick(museum: MuseumModel)
 }
 
 class MuseumAdapter(private var museums: ArrayList<MuseumModel>,

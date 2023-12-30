@@ -34,7 +34,6 @@ class AccountFragment : Fragment() {
 
     private lateinit var viewModel: AccountViewModel
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
-    //private val museumListViewModel: MuseumListViewModel by activityViewModels()
     private var _fragBinding: FragmentAccountBinding? = null
     private val fragBinding get() = _fragBinding!!
     lateinit var loader : AlertDialog
@@ -91,16 +90,7 @@ class AccountFragment : Fragment() {
 
             override fun onMenuItemSelected(item: MenuItem): Boolean {
                 // Validate and handle the selected menu item
-/*
-                when (item.itemId) {
 
-                    R.id.item_logout -> {
-                        signOut()
-                    }
-                }
-                //NavigationUI.onNavDestinationSelected(item,requireView().findNavController())
-
- */
                 return NavigationUI.onNavDestinationSelected(item,requireView().findNavController())
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
@@ -115,12 +105,12 @@ class AccountFragment : Fragment() {
 
     }
 
-    fun updateLoader(status: Boolean){
+    private fun updateLoader(status: Boolean){
         when (status) {
             true -> {
                 hideLoader(loader)
                 }
-            false -> Toast.makeText(context,getString(R.string.addMuseumError), Toast.LENGTH_LONG).show()
+            false -> Toast.makeText(context,getString(R.string.updateUserError), Toast.LENGTH_LONG).show()
         }
     }
 

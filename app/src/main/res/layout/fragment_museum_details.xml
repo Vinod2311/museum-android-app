@@ -67,7 +67,7 @@
 
                         <androidx.constraintlayout.widget.ConstraintLayout
 
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="8dp"
                             app:layout_constraintStart_toStartOf="parent"
@@ -112,7 +112,7 @@
                         app:layout_constraintTop_toBottomOf="@id/cardview">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="8dp">
 
@@ -134,6 +134,7 @@
                                 android:layout_height="wrap_content"
                                 android:background="@android:drawable/editbox_background"
                                 android:text="@{museumDetailsVM.observableMuseum.shortDescription}"
+                                app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/titleText" />
 
@@ -184,7 +185,7 @@
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cardView3"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
@@ -198,7 +199,7 @@
 
 
                         <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="8dp">
 
@@ -216,7 +217,7 @@
 
                             <TextView
                                 android:id="@+id/reviewText"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
                                 android:layout_marginEnd="8dp"
@@ -238,8 +239,8 @@
                                 android:layout_marginTop="8dp"
                                 android:layout_marginEnd="8dp"
                                 android:numStars="5"
-                                android:stepSize="0.5"
                                 android:rating="@{museumDetailsVM.observableMuseum.rating}"
+                                android:stepSize="0.5"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintHorizontal_bias="1.0"
                                 app:layout_constraintStart_toEndOf="@+id/reviewTitle"

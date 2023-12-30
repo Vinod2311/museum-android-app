@@ -72,7 +72,7 @@ class MuseumListFragment : Fragment(), MuseumListener {
             else{
                 render(viewModel.observableMuseumList.value as ArrayList<MuseumModel>)
             }
-            hideLoader(loader)
+
             checkSwipeRefresh()
         })
 
@@ -215,6 +215,7 @@ class MuseumListFragment : Fragment(), MuseumListener {
     }
 
     private fun render(museumList: ArrayList<MuseumModel>) {
+        hideLoader(loader)
         museumAdapter = MuseumAdapter(museumList,viewModel.observableFavouriteList.value as ArrayList,this,viewModel.readOnly.value!!)
         fragBinding.recyclerView.adapter = museumAdapter
         //onRefresh()
@@ -253,20 +254,12 @@ class MuseumListFragment : Fragment(), MuseumListener {
     override fun onResume() {
         super.onResume()
         showLoader(loader,"Downloading Museums")
-
-        /*
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner, Observer { firebaseUser ->
-            if (firebaseUser != null) {
-                viewModel.liveFirebaseUser.value = firebaseUser
-                viewModel.load()
-
-            }
+        if (viewModel.observableMuseumList.value?.size != 0)
+        {
+            render(viewModel.observableMuseumList.value as ArrayList<MuseumModel>)
+        }
 
 
-        })
-
-         */
-        //hideLoader(loader)
     }
 
     fun onRefresh() {
@@ -286,9 +279,6 @@ class MuseumListFragment : Fragment(), MuseumListener {
 
     }
 
-    override fun onFavouriteMuseumClick(museum: MuseumModel) {
-        TODO("Not yet implemented")
-    }
 
     override fun onEditMuseumClick(museum: MuseumModel) {
         val action = MuseumListFragmentDirections.actionMuseumListFragmentToAddMuseumFragment(museum.uid)

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
@@ -24,6 +25,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseUser
 import com.squareup.picasso.Picasso
 import ie.setu.museum.R
@@ -51,8 +53,10 @@ class Home : AppCompatActivity() {
     private lateinit var loggedInViewModel : LoggedInViewModel
     private lateinit var intentLauncher : ActivityResultLauncher<Intent>
     private val mapsViewModel : MapsViewModel by viewModels()
-    lateinit var loader : AlertDialog
+    private lateinit var loader : AlertDialog
     private lateinit var toggleDarkMode: SwitchCompat
+    private lateinit var editor: SharedPreferences.Editor
+    private lateinit var navView: NavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,40 +72,19 @@ class Home : AppCompatActivity() {
             R.id.addMuseumFragment, R.id.museumListFragment), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        val navView = homeBinding.navView
+        navView = homeBinding.navView
         navView.setupWithNavController(navController)
         initNavHeader()
 
-        val sharedPreferences = getSharedPreferences("Mode", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        val nightMode = sharedPreferences.getBoolean("night",false)
-
-        val item = navView.menu.findItem(R.id.changeTheme) as MenuItem
-        item.setActionView(R.layout.togglebutton_layout)
-        toggleDarkMode = item.actionView!!.findViewById(R.id.toggleButton)
-
-        if(nightMode) {
-            toggleDarkMode.isChecked = true
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        }
-        //else {
-        //    toggleDarkMode.isChecked = false
-        //    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        //}
+        checkDarkMode()
 
         toggleDarkMode.setOnCheckedChangeListener{ _, isChecked ->
             if (isChecked) {
                 editor.putBoolean("night",true)
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                //editor.clear()
-
-
             } else {
                 editor.putBoolean("night",false)
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                //editor.clear()
-
-
             }
             editor.commit()
         }
@@ -134,6 +117,21 @@ class Home : AppCompatActivity() {
             if (firebaseUser != null)
                 updateNavHeader(loggedInViewModel.liveFirebaseUser.value!!)
         })
+    }
+
+    private fun checkDarkMode() {
+        val sharedPreferences = getSharedPreferences("Mode", Context.MODE_PRIVATE)
+        editor = sharedPreferences.edit()
+        val nightMode = sharedPreferences.getBoolean("night",false)
+
+        val item = navView.menu.findItem(R.id.changeTheme) as MenuItem
+        item.setActionView(R.layout.togglebutton_layout)
+        toggleDarkMode = item.actionView!!.findViewById(R.id.toggleButton)
+
+        if(nightMode) {
+            toggleDarkMode.isChecked = true
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
     }
 
     private fun initNavHeader() {
@@ -208,15 +206,4 @@ class Home : AppCompatActivity() {
     }
 
 
-/*
-    fun switchDarkMode(toggleDarkMode: MenuItem) {
-        if(toggleDarkMode.isCheckedvbb ){
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        }
-        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-    }
-
- */
 }

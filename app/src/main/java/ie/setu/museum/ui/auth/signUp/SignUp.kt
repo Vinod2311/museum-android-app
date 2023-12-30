@@ -23,34 +23,14 @@ import timber.log.Timber
 class SignUp : AppCompatActivity() {
 
     lateinit var binding: ActivitySignUpViewBinding
-    lateinit var signUpViewModel: SignUpViewModel
+    private lateinit var signUpViewModel: SignUpViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val text = "Already have an account. Login now!"
-        val ss  = SpannableString(text)
-        val clickableText: ClickableSpan = object: ClickableSpan(){
-
-            override fun onClick(widget: View) {
-                startActivity(Intent(this@SignUp, Login::class.java))
-                finish()
-            }
-
-            override fun updateDrawState(ds: TextPaint) {
-                super.updateDrawState(ds)
-                ds.color = Color.BLUE
-                ds.isUnderlineText=true
-            }
-        }
-        ss.setSpan(clickableText, 24,30, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        val boldSpan = StyleSpan(Typeface.BOLD)
-        ss.setSpan(boldSpan, 24, 30, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        binding.loginText.text = ss
-        binding.loginText.movementMethod = LinkMovementMethod.getInstance()
-        binding.loginText.highlightColor = Color.TRANSPARENT
+        setUpTextLinkToLogin()
 
         binding.signUp.setOnClickListener{
             if (binding.emailText.text.toString().isNotEmpty() && binding.passwordText.text.toString().isNotEmpty()){
@@ -78,6 +58,30 @@ class SignUp : AppCompatActivity() {
         startActivity(Intent(this, Login::class.java))
         finish()
         super.onBackPressed()
+    }
+
+    private fun setUpTextLinkToLogin(){
+        val text = "Already have an account. Login now!"
+        val ss  = SpannableString(text)
+        val clickableText: ClickableSpan = object: ClickableSpan(){
+
+            override fun onClick(widget: View) {
+                startActivity(Intent(this@SignUp, Login::class.java))
+                finish()
+            }
+
+            override fun updateDrawState(ds: TextPaint) {
+                super.updateDrawState(ds)
+                ds.color = Color.BLUE
+                ds.isUnderlineText=true
+            }
+        }
+        ss.setSpan(clickableText, 24,30, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        val boldSpan = StyleSpan(Typeface.BOLD)
+        ss.setSpan(boldSpan, 24, 30, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        binding.loginText.text = ss
+        binding.loginText.movementMethod = LinkMovementMethod.getInstance()
+        binding.loginText.highlightColor = Color.TRANSPARENT
     }
 
     private fun validateForm(): Boolean {

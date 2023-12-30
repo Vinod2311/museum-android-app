@@ -1,7 +1,6 @@
 package ie.setu.museum.ui.museumList
 
 import android.app.Application
-import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,18 +11,11 @@ import timber.log.Timber
 
 class MuseumListViewModel(application: Application) : AndroidViewModel(application) {
 
-    //private lateinit var refreshIntentLauncher : ActivityResultLauncher<Intent>
-    //private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
 
     private val museumList = MutableLiveData<List<MuseumModel>>().apply {value = ArrayList<MuseumModel>()}
     val observableMuseumList: LiveData<List<MuseumModel>>
         get() = museumList
 
-    private val museumImages = MutableLiveData<List<Uri>>()
-    val observableMuseumImages: LiveData<List<Uri>>
-        get() = museumImages
-
-    //private var position: Int = 0
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
     var readOnly = MutableLiveData(false)
 
@@ -35,14 +27,6 @@ class MuseumListViewModel(application: Application) : AndroidViewModel(applicati
 
     var filteredMuseumList = MutableLiveData<ArrayList<MuseumModel>>().apply {value = ArrayList<MuseumModel>()}
 
-
-    init {
-
-        //load()
-        //registerMapCallback()
-        //registerRefreshCallback()
-
-    }
 
     fun load() {
         try {
@@ -71,8 +55,8 @@ class MuseumListViewModel(application: Application) : AndroidViewModel(applicati
         val localList = ArrayList<MuseumModel>()
         filterCategory.value?.forEach{category ->
             museumList.value?.forEach { museum ->
-                        if(museum.category == category)
-                        localList.add(museum)
+                if(museum.category == category)
+                    localList.add(museum)
             }
         }
         filteredMuseumList.value = localList
@@ -96,66 +80,5 @@ class MuseumListViewModel(application: Application) : AndroidViewModel(applicati
         //}
     }
 
-    //fun getMuseums() = app.museums.findAll()
-    /*
-        fun doFilterList(query:String?): ArrayList<MuseumModel>{
-            val filteredList = ArrayList<MuseumModel>()
-            if (query != null){
-                val searchText = query.lowercase(Locale.ROOT)
-                for (i in app.museums.findAll()){
-                    if(i.name.lowercase(Locale.ROOT).contains(searchText)){
-                        filteredList.add(i)
-                    }
-                }
-            }
-            return filteredList
-        }
-    */
 
-
-/*
-    fun doEditMuseum(museum: MuseumModel, pos: Int) {
-        val launchIntent = Intent(view, AddMuseumView::class.java)
-        launchIntent.putExtra("museum_edit", museum)
-        loggedInUser= view.intent.extras?.getParcelable("user")!!
-        launchIntent.putExtra("user",loggedInUser)
-        position = pos
-        refreshIntentLauncher.launch(launchIntent)
-    }
-
-    fun doShowMuseum(museum: MuseumModel) {
-        val launchIntent = Intent(view, MuseumDetailsView::class.java)
-        launchIntent.putExtra("museum", museum)
-        refreshIntentLauncher.launch(launchIntent)
-    }
-
-    fun doShowAccount(){
-        val launchIntent = Intent(view, AccountView::class.java)
-        loggedInUser= view.intent.extras?.getParcelable("user")!!
-        launchIntent.putExtra("user",loggedInUser)
-        refreshIntentLauncher.launch(launchIntent)
-    }
-
-    fun doShowMuseumsMap() {
-
-        val launcherIntent = Intent(view, AllMuseumLocationsView::class.java)
-        mapIntentLauncher.launch(launcherIntent)
-    }
-
-    private fun registerRefreshCallback() {
-        refreshIntentLauncher =
-            view.registerForActivityResult(
-                ActivityResultContracts.StartActivityForResult()
-            ) {
-                if (it.resultCode == Activity.RESULT_OK) view.onRefresh()
-                else // Deleting
-                    if (it.resultCode == 99) view.onDelete(position)
-            }
-    }
-    private fun registerMapCallback() {
-        mapIntentLauncher = view.registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-        {  }
-    }
-
- */
 }

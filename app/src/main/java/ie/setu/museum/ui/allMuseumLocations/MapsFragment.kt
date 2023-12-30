@@ -63,8 +63,6 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
             )
             //mapsViewModel.map.addMarker(MarkerOptions().position(currentLoc).title("You are Here!"))
             //mapsViewModel.map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 14f))
-
-
         }
 
         museumListViewModel.observableMuseumList.observe(viewLifecycleOwner, Observer { museums ->
@@ -73,7 +71,6 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
                 hideLoader(loader)
             }
         })
-
 
         mapsViewModel.map.setOnMarkerClickListener(this)
 
@@ -139,8 +136,8 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
                 toggleMuseums.setOnCheckedChangeListener { _, isChecked ->
                     if (isChecked) museumListViewModel.loadAll()
                     else museumListViewModel.load()
+                    /*
                     if (museumListViewModel.observableFavouriteList.value?.size != 0) {
-                        /*
                         for (favouriteMuseum in museumListViewModel.observableFavouriteList.value!!) {
                             for (museum in museumListViewModel.observableMuseumList.value!!)
                                 if (museum.uid == favouriteMuseum?.uid) {
@@ -152,9 +149,9 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
                                     museum.isFavourite = false
                                 }
                         }
-
-                         */
                     }
+
+                     */
                 }
             }
 
@@ -218,6 +215,16 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
         val museum = marker.tag as MuseumModel
         fragBinding.cardView.name.text = museum!!.name
         fragBinding.cardView.category.text = museum!!.category
+        if (museumListViewModel.observableFavouriteList.value?.size != 0) {
+            for (favouriteMuseum in museumListViewModel.observableFavouriteList.value!!) {
+                if (museum.uid == favouriteMuseum?.uid) {
+                    fragBinding.cardView.favouriteButton.setBackgroundResource(R.drawable.ic_favorite_red)
+                    break
+                } else {
+                    fragBinding.cardView.favouriteButton.setBackgroundResource(R.drawable.ic_favorite_grey)
+                }
+            }
+        }
         Picasso.get().load(museum.images!![0].toUri()).into(fragBinding.cardView.imageIcon)
         return false
     }

@@ -51,13 +51,5 @@ class AccountViewModel(application: Application) : AndroidViewModel(application)
         }
 
     }
-/*
-    fun signOut(item: MenuItem) {
-        loggedInViewModel.logOut()
-        val intent = Intent(this, Login::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
-    }
 
- */
 }

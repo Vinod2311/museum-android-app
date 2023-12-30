@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -67,7 +66,6 @@ class AddMuseumFragment : Fragment() {
         //_fragBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_add_museum,container,false)
         //fragBinding.lifecycleOwner = viewLifecycleOwner
         val root = fragBinding.root
-
         viewModel = ViewModelProvider(this).get(AddMuseumViewModel::class.java)
 
         fragBinding.museumVM = viewModel
@@ -108,9 +106,6 @@ class AddMuseumFragment : Fragment() {
         fragBinding.createButton.setOnClickListener{
             if (fragBinding.nameText.text.toString().isNotEmpty() && fragBinding.category.text.toString().isNotEmpty()){
                 //viewModel.cacheMuseum(museum)
-                //viewModel.museum.value!!.email = loggedInViewModel.liveFirebaseUser.value?.email
-
-                //Timber.i("museumVM is $dummy")
                 viewModel.doAddOrSave(loggedInViewModel.liveFirebaseUser)
             } else if (fragBinding.nameText.text.toString().isEmpty()){
                 fragBinding.name.error = "Museum name is required"
@@ -197,20 +192,6 @@ class AddMuseumFragment : Fragment() {
     fun showMuseum() {
         fragBinding.museumVM = viewModel
         refreshImageSlider()
-        /*if (viewModel.observableMuseum.value!!.image[0].isNotEmpty()) {
-            for (x in viewModel.observableMuseum.value!!.image) {
-                imageList.add(SlideModel(x.toString()))
-            }
-        }
-
-        if (imageList.isNotEmpty())
-            fragBinding.imageView.setImageList(imageList, ScaleTypes.CENTER_CROP)
-        if (viewModel.observableMuseum.value!!.image[0].isNotEmpty()) {
-            fragBinding.chooseImage.setText(R.string.change_image)
-
-        }
-
-         */
     }
 
     private fun render(status: Boolean) {
@@ -244,7 +225,7 @@ class AddMuseumFragment : Fragment() {
                         showLoader(loader,"Changing Image")
                         if (result.data!!.clipData != null) {
                             Timber.i("Got Result ${result.data!!.clipData}")
-                            var count:Int = result.data!!.clipData!!.itemCount
+                            val count:Int = result.data!!.clipData!!.itemCount
                             var currentItem = 0
                             //viewModel.museum.value!!.image.clear()
                             //FirebaseImageManager.observableImageUri.value!!.clear()
@@ -262,7 +243,7 @@ class AddMuseumFragment : Fragment() {
                             //updateImage(imageList)
                         } else if(result.data != null) {
                             val uri:Uri = result!!.data!!.data!!
-                            val bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(),uri)
+                            //val bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(),uri)
                             Timber.i("Got Result ${result!!.data!!.data}")
                             //viewModel.museum.value!!.image.clear()
                             //viewModel.museum.value!!.image.add(uri.toString())

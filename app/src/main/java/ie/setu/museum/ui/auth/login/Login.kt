@@ -38,7 +38,31 @@ class Login : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setUpTextLinkToSignUp()
 
+        binding.googleSignInButton.setSize(SignInButton.SIZE_WIDE)
+        binding.googleSignInButton.setColorScheme(0)
+
+        binding.login.setOnClickListener {
+            signIn(binding.emailText.text.toString(), binding.passwordText.text.toString())
+        }
+    }
+
+    public override fun onStart() {
+        super.onStart()
+        loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
+        loginViewModel.liveFirebaseUser.observe(this, Observer {
+            firebaseUser -> if (firebaseUser != null)
+                startActivity(Intent(this, Home::class.java))
+        })
+        loginViewModel.firebaseAuthManager.errorStatus.observe(this, Observer {
+                status -> checkStatus(status)
+        })
+        setupGoogleSignInCallback()
+        binding.googleSignInButton.setOnClickListener { googleSignIn() }
+    }
+
+    private fun setUpTextLinkToSignUp(){
         val text = "Don't have an account? Sign up now!"
         val ss  = SpannableString(text)
         val clickableText: ClickableSpan = object: ClickableSpan(){
@@ -60,38 +84,6 @@ class Login : AppCompatActivity() {
         binding.signupText.text = ss
         binding.signupText.movementMethod = LinkMovementMethod.getInstance()
         binding.signupText.highlightColor = Color.TRANSPARENT
-
-        binding.googleSignInButton.setSize(SignInButton.SIZE_WIDE)
-        binding.googleSignInButton.setColorScheme(0)
-/*
-        binding.login.setOnClickListener {
-            if (binding.emailText.text.toString().isNotEmpty() && binding.passwordText.text.toString().isNotEmpty()){
-                signIn(binding.emailText.text.toString(), binding.passwordText.text.toString())
-            } else if (binding.emailText.text.toString().isEmpty()){
-                binding.email.error = "Email is required"
-
-            } else if (binding.passwordText.text.toString().isEmpty()){
-                binding.password.error = "Password is required"
-            }
-            }
-*/
-        binding.login.setOnClickListener {
-            signIn(binding.emailText.text.toString(), binding.passwordText.text.toString())
-        }
-    }
-
-    public override fun onStart() {
-        super.onStart()
-        loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
-        loginViewModel.liveFirebaseUser.observe(this, Observer {
-            firebaseUser -> if (firebaseUser != null)
-                startActivity(Intent(this, Home::class.java))
-        })
-        loginViewModel.firebaseAuthManager.errorStatus.observe(this, Observer {
-                status -> checkStatus(status)
-        })
-        setupGoogleSignInCallback()
-        binding.googleSignInButton.setOnClickListener { googleSignIn() }
     }
 
     private fun signIn(email: String, password: String) {
