@@ -1,23 +1,6 @@
 package ie.setu.museum.models.museum
 
-import android.content.Context
-import android.net.Uri
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import com.google.gson.JsonPrimitive
-import com.google.gson.JsonSerializationContext
-import com.google.gson.JsonSerializer
-import com.google.gson.reflect.TypeToken
-import ie.setu.museum.helpers.exists
-import ie.setu.museum.helpers.read
-import ie.setu.museum.helpers.write
-import ie.setu.museum.models.user.UserModel
-import timber.log.Timber
-import java.lang.reflect.Type
-import java.util.Random
+/*
 
 const val JSON_FILE = "museums.json"
 val gsonBuilder: Gson = GsonBuilder().setPrettyPrinting()
@@ -80,13 +63,13 @@ class MuseumJSONStore(private val context: Context) : MuseumStore {
         serialize()
     }
 
-    override fun findById(id: Long): MuseumModel? {
+    override fun findById(id:Long): MuseumModel? {
         return museums.find { p -> p.id == id }
     }
 
-    override fun findUserMuseums(user: UserModel): List<MuseumModel> {
-        var foundMuseums: List<MuseumModel> = museums.filter{ p -> p.user.id == user.id}
-        return foundMuseums
+    override fun findUserMuseums(userId:Long): ArrayList<MuseumModel> {
+        var foundMuseums: List<MuseumModel> = museums.filter{ p -> p.user.id == userId}
+        return foundMuseums as ArrayList
     }
 
     private fun serialize() {
@@ -121,3 +104,4 @@ class UriParser : JsonDeserializer<Uri>,JsonSerializer<Uri> {
         return JsonPrimitive(src.toString())
     }
 }
+*/

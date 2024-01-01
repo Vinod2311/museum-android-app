@@ -4,7 +4,7 @@
 
 
 
-
+<!--
     <item
         android:id="@+id/item_cancel"
         android:icon="@android:drawable/ic_menu_close_clear_cancel"
@@ -17,6 +17,6 @@
         android:iconTint="#8FFFFFFF"
         android:title="@string/logout_button"
         app:showAsAction="always" />
-
+-->
 
 </menu>

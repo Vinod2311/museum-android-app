@@ -16,8 +16,17 @@
         android:id="@+id/account"
         android:icon="@android:drawable/ic_menu_myplaces"
         android:title="@string/account_button"
-
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/addMuseumFragment"
+        android:orderInCategory="100"
+        android:title="Add Museum"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/museumListFragment"
+        android:orderInCategory="100"
+        android:title="Museum List"
+        app:showAsAction="never" />
 
 
 </menu>

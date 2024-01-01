@@ -1,18 +1,6 @@
 package ie.setu.museum.models.museum
 
-import android.content.Context
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
-import ie.setu.museum.helpers.exists
-import ie.setu.museum.helpers.read
-import ie.setu.museum.helpers.write
-import ie.setu.museum.models.user.UserModel
-import ie.setu.museum.models.user.UserStore
-import timber.log.Timber
-import java.lang.reflect.Type
-import java.util.Random
-
+/*
 const val JSON_USER_FILE = "users.json"
 val gsonUserBuilder: Gson = GsonBuilder().setPrettyPrinting()
     .create()
@@ -87,4 +75,8 @@ class UserJSONStore(private val context: Context) : UserStore {
     private fun logAll() {
         users.forEach { Timber.i("$it") }
     }
+
+
 }
+
+ */
