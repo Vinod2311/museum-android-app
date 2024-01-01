@@ -38,14 +38,22 @@ class MuseumDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        viewModel = ViewModelProvider(this).get(MuseumDetailsViewModel::class.java)
         _fragBinding = FragmentMuseumDetailsBinding.inflate(inflater, container, false)
         val root = fragBinding.root
+
         setupMenu()
+
+        //Setup vieModel
+        viewModel = ViewModelProvider(this).get(MuseumDetailsViewModel::class.java)
+
+        //data-binding
         fragBinding.museumDetailsVM = viewModel
+
+        //Setup Observer
         viewModel.observableMuseum.observe(viewLifecycleOwner, Observer {
             showMuseum() })
+
+        //Fetch museum details
         viewModel.getMuseum(args.museumId!!)
 
         return root

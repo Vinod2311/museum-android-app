@@ -23,7 +23,7 @@ class AddMuseumViewModel(application: Application) : AndroidViewModel(applicatio
     private val museum = MutableLiveData<MuseumModel>()
     val observableMuseum: LiveData<MuseumModel>
         get() = museum
-        //set(value) {museum.value = value.value}
+
 
     private val museumImages = MutableLiveData<List<Uri>>()
     val observableMuseumImages: LiveData<List<Uri>>
@@ -38,13 +38,17 @@ class AddMuseumViewModel(application: Application) : AndroidViewModel(applicatio
 
     }
 
+    //Get a museum using userId and museumId
     fun getMuseum(userId:String, museumId: String) {
         FirebaseDBManager.findById(userId,museumId, museum)
     }
 
+    /*
     fun getMuseumImages(userId:String, museumId: String) = runBlocking{
         FirebaseImageManager.downloadImageURLs(userId,museumId, museumImages)
     }
+
+     */
 
     fun deleteMuseumImages() = runBlocking {
         FirebaseImageManager.deleteAllMuseumImages(museum.value!!.uid!!)
@@ -56,6 +60,7 @@ class AddMuseumViewModel(application: Application) : AndroidViewModel(applicatio
         //FirebaseDBManager.update(userId,museum.value!!)
     }
 
+    //Upload or update museum to firebase
     fun doAddOrSave(firebaseUser: MutableLiveData<FirebaseUser>){
 
         if (edit) {

@@ -57,25 +57,26 @@ class MuseumListFragment : Fragment(), MuseumListener {
     ): View? {
         _fragBinding = FragmentMuseumListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
+
+        //Setup viewModel
         viewModel = ViewModelProvider(requireActivity()).get(MuseumListViewModel::class.java)
+
         setupMenu()
         setupChips()
         //showLoader(loader,"Downloading Museums")
 
+        //Setup Observers
         viewModel.observableMuseumList.observe(viewLifecycleOwner, Observer {
             viewModel.filterMuseumByCategory()
         })
-
         viewModel.filteredMuseumList.observe(viewLifecycleOwner, Observer {
             if (viewModel.filterCategory.value?.size != 0)
                 render(viewModel.filteredMuseumList.value!!)
             else{
                 render(viewModel.observableMuseumList.value as ArrayList<MuseumModel>)
             }
-
             checkSwipeRefresh()
         })
-
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner, Observer { firebaseUser ->
             if (firebaseUser != null) {
                 viewModel.liveFirebaseUser.value = firebaseUser
@@ -83,11 +84,14 @@ class MuseumListFragment : Fragment(), MuseumListener {
             }
         })
 
-
+        //Setup recycler view
         val layoutManager = LinearLayoutManager(requireContext())
         fragBinding.recyclerView.layoutManager = layoutManager
+
+        //Setup swipe up to refresh feature
         setSwipeRefresh()
 
+        //Setup swipe left to delete
         val swipeDeleteHandler = object : SwipeToDeleteCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val adapter = fragBinding.recyclerView.adapter as MuseumAdapter
@@ -100,6 +104,7 @@ class MuseumListFragment : Fragment(), MuseumListener {
         val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)
         itemTouchDeleteHelper.attachToRecyclerView(fragBinding.recyclerView)
 
+        //Setup swipe right to edit
         val swipeEditHandler = object : SwipeToEditCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 onEditMuseumClick(viewHolder.itemView.tag as MuseumModel)
@@ -109,24 +114,23 @@ class MuseumListFragment : Fragment(), MuseumListener {
         itemTouchEditHelper.attachToRecyclerView(fragBinding.recyclerView)
 
 
-
+        //Setup searchView to allow users to search for museum by name
         fragBinding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextChange(query: String?): Boolean {
                  if(::museumAdapter.isInitialized)
                      museumAdapter.filter.filter(query)
                 return false
             }
-
             override fun onQueryTextSubmit(query: String?): Boolean {
                 museumAdapter.filter.filter(query)
                 return false
             }})
 
+        //Setup add button on-click listener
         fragBinding.addButton.setOnClickListener{
             val action = MuseumListFragmentDirections.actionMuseumListFragmentToAddMuseumFragment("empty")
             findNavController().navigate(action)
         }
-
 
         return root
     }
@@ -139,6 +143,8 @@ class MuseumListFragment : Fragment(), MuseumListener {
 
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.menu_museum_list, menu)
+
+                //Setup toggle switch - show all museums when checked, show user museums when unchecked
                 val item = menu.findItem(R.id.toggleMuseums) as MenuItem
                 item.setActionView(R.layout.togglebutton_layout)
                 toggleMuseums = item.actionView!!.findViewById(R.id.toggleButton)
@@ -214,6 +220,7 @@ class MuseumListFragment : Fragment(), MuseumListener {
         }
     }
 
+    //Show museums in recycler view
     private fun render(museumList: ArrayList<MuseumModel>) {
         hideLoader(loader)
         museumAdapter = MuseumAdapter(museumList,viewModel.observableFavouriteList.value as ArrayList,this,viewModel.readOnly.value!!)
@@ -262,15 +269,7 @@ class MuseumListFragment : Fragment(), MuseumListener {
 
     }
 
-    fun onRefresh() {
-        museumAdapter.
-        notifyItemRangeChanged(0,viewModel.observableMuseumList.value!!.size)
-    }
-
-    fun onDelete(position : Int) {
-        fragBinding.recyclerView.adapter?.notifyItemRemoved(position)
-    }
-
+    //Museum card on click listener - go to museum details fragment when clicked
     override fun onMuseumClick(museum: MuseumModel) {
         //if(!viewModel.readOnly.value!!){
             val action = MuseumListFragmentDirections.actionMuseumListFragmentToMuseumDetailsFragment(museum.uid)
@@ -279,7 +278,7 @@ class MuseumListFragment : Fragment(), MuseumListener {
 
     }
 
-
+    //When museum card is swiped right to edit - go to add museum fragment (in edit mode)
     override fun onEditMuseumClick(museum: MuseumModel) {
         val action = MuseumListFragmentDirections.actionMuseumListFragmentToAddMuseumFragment(museum.uid)
         findNavController().navigate(action)

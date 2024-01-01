@@ -1,11 +1,15 @@
 package ie.setu.museum.firebase
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
+import com.facebook.AccessToken
+import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -16,7 +20,6 @@ import timber.log.Timber
 class FirebaseAuthManager(application: Application) {
 
     private var application: Application? = null
-
     var firebaseAuth: FirebaseAuth? = null
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
     var loggedOut = MutableLiveData<Boolean>()
@@ -50,6 +53,7 @@ class FirebaseAuthManager(application: Application) {
     }
 
     fun register(firstName:String?, lastName: String?, email: String?, password: String?) {
+        //Create a profileUpdate object with the full name of user
         val profileUpadates = userProfileChangeRequest{
             displayName = "$firstName $lastName"
         }
@@ -60,6 +64,7 @@ class FirebaseAuthManager(application: Application) {
                     errorStatus.postValue(false)
                     Timber.i("liveFirebaseUser is ${liveFirebaseUser.value}")
                     Timber.i("firebaseauth.currentuser is ${firebaseAuth!!.currentUser}")
+                    //update current user's display name
                     firebaseAuth!!.currentUser!!.updateProfile(profileUpadates)
                         .addOnCompleteListener{task ->
                             liveFirebaseUser.value = firebaseAuth!!.currentUser
@@ -76,6 +81,7 @@ class FirebaseAuthManager(application: Application) {
     fun logOut() {
         firebaseAuth!!.signOut()
         googleSignInClient.value!!.signOut()
+        LoginManager.getInstance().logOut()
         loggedOut.postValue(true)
         errorStatus.postValue(false)
     }
@@ -104,6 +110,26 @@ class FirebaseAuthManager(application: Application) {
                 } else {
                     // If sign in fails, display a message to the user.
                     Timber.i( "signInWithCredential:failure $task.exception")
+                    errorStatus.postValue(true)
+                }
+            }
+    }
+
+    //Use facebook credentials to authenticate with firebase
+    fun handleFacebookAccessToken(token: AccessToken) {
+
+
+        val credential = FacebookAuthProvider.getCredential(token.token)
+        firebaseAuth!!.signInWithCredential(credential)
+            .addOnCompleteListener(application!!.mainExecutor) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Timber.i( "signInWithCredential:success Facebook")
+                    liveFirebaseUser.postValue(firebaseAuth!!.currentUser)
+                    //updateUI(user)
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Timber.i( "signInWithCredential:failure Facebook $task.exception")
                     errorStatus.postValue(true)
                 }
             }

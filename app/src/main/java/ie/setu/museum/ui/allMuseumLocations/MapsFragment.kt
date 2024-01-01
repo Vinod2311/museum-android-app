@@ -51,11 +51,13 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
     @SuppressLint("MissingPermission")
     private val callback = OnMapReadyCallback { googleMap ->
         mapsViewModel.map = googleMap
-        //val loc = LatLng(52.245696, -7.139102)
+
+        //Setup map settings
         mapsViewModel.map.isMyLocationEnabled = true
         mapsViewModel.map.uiSettings.isZoomControlsEnabled = true
         mapsViewModel.map.uiSettings.isMyLocationButtonEnabled = true
 
+        //Setup observers
         mapsViewModel.currentLocation.observe(viewLifecycleOwner) {
             val currentLoc = LatLng(
                 mapsViewModel.currentLocation.value!!.latitude,
@@ -64,7 +66,6 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
             //mapsViewModel.map.addMarker(MarkerOptions().position(currentLoc).title("You are Here!"))
             //mapsViewModel.map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 14f))
         }
-
         museumListViewModel.observableMuseumList.observe(viewLifecycleOwner, Observer { museums ->
             museums?.let {
                 render(museums as ArrayList<MuseumModel>)
@@ -72,9 +73,10 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
             }
         })
 
+        //Setup marker on-click listener
         mapsViewModel.map.setOnMarkerClickListener(this)
 
-        //mapsViewModel.map.addMarker(MarkerOptions().position(loc).title("SETU"))
+
 
     }
 
@@ -84,12 +86,15 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
         savedInstanceState: Bundle?
     ): View? {
         _fragBinding = FragmentMapsBinding.inflate(inflater, container, false)
-
         val root = fragBinding.root
-
+        //Create a loader
         loader = createLoader(requireActivity())
+
+        //Setup viewModel
         mapsViewModel = ViewModelProvider(this)[MapsViewModel::class.java]
+
         setupMenu()
+
         /*
         museumListViewModel.observableMuseumList.observe(viewLifecycleOwner, Observer { museums ->
             museums?.let {
@@ -97,8 +102,9 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
                 hideLoader(loader)
             }
         })
-
          */
+
+        //Setup up favourites check box on checked listener- update museum list to show favourites only when checked
         fragBinding.checkBoxFavourites.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked){
                 museumListViewModel.filterMuseumByFavourites()
@@ -110,6 +116,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
                 }
             }
         }
+
         return root
     }
 
@@ -136,22 +143,6 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
                 toggleMuseums.setOnCheckedChangeListener { _, isChecked ->
                     if (isChecked) museumListViewModel.loadAll()
                     else museumListViewModel.load()
-                    /*
-                    if (museumListViewModel.observableFavouriteList.value?.size != 0) {
-                        for (favouriteMuseum in museumListViewModel.observableFavouriteList.value!!) {
-                            for (museum in museumListViewModel.observableMuseumList.value!!)
-                                if (museum.uid == favouriteMuseum?.uid) {
-                                    binding.favouriteButton.setBackgroundResource(R.drawable.ic_favorite_red)
-                                    museum.isFavourite = true
-                                    break
-                                } else {
-                                    binding.favouriteButton.setBackgroundResource(R.drawable.ic_favorite_grey)
-                                    museum.isFavourite = false
-                                }
-                        }
-                    }
-
-                     */
                 }
             }
 
@@ -162,6 +153,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
             }     }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
+    //Place markers on map for each museum
     private fun render(museumList: ArrayList<MuseumModel>){
         var markerColour : Float
         mapsViewModel.map.clear()
@@ -174,20 +166,17 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
                     } else {
                         it.isFavourite = false
                     }
-
                 }
             markerColour = if(it.email.equals(this.museumListViewModel.liveFirebaseUser.value!!.email))
                 BitmapDescriptorFactory.HUE_RED + 5
             else
                 BitmapDescriptorFactory.HUE_AZURE
             mapsViewModel.map.addMarker(
-
                 MarkerOptions().position(LatLng(it.lat, it.lng))
                     .title("${it.name}")
                     .snippet(it.category)
                     .icon(
                         BitmapDescriptorFactory.defaultMarker(markerColour))
-
             )?.tag = it
             }
         }
@@ -197,11 +186,15 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
         super.onResume()
         fragBinding.cardView.name.text = "Click a marker for more details!"
         showLoader(loader,"Downloading Museums")
+
+        //Update camera location and zoom
         val currentLoc = LatLng(
             mapsViewModel.currentLocation.value!!.latitude,
             mapsViewModel.currentLocation.value!!.longitude
         )
         mapsViewModel.map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 7f))
+
+        //Update museumList ViewModel depending on current user
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner) {
                 firebaseUser -> if (firebaseUser != null) {
                 museumListViewModel.liveFirebaseUser.value = firebaseUser
@@ -210,11 +203,14 @@ class MapsFragment : Fragment(), GoogleMap.OnMarkerClickListener {
         }
     }
 
+    //Update card to display museum details when a marker is clicked
     override fun onMarkerClick(marker: Marker): Boolean {
-        //mapsViewModel.updateCard(marker)
+
         val museum = marker.tag as MuseumModel
         fragBinding.cardView.name.text = museum!!.name
         fragBinding.cardView.category.text = museum!!.category
+
+        //(check if the museum is in list of favourites to determine how to update favourite button)
         if (museumListViewModel.observableFavouriteList.value?.size != 0) {
             for (favouriteMuseum in museumListViewModel.observableFavouriteList.value!!) {
                 if (museum.uid == favouriteMuseum?.uid) {

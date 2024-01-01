@@ -53,4 +53,9 @@
     <string name="select_profile_image">Select Profile Image</string>
     <string name="name">Name</string>
     <string name="natural_history">Natural History</string>
+    <string name="favourites">Favourites</string>
+
+    <string name="facebook_app_id">1226598491630450</string>
+    <string name="fb_login_protocol_scheme">fb1226598491630450</string>
+    <string name="facebook_client_token">0f0c26e5a525f104763ac37071bda271</string>
 </resources>

@@ -58,26 +58,43 @@ class Home : AppCompatActivity() {
     private lateinit var editor: SharedPreferences.Editor
     private lateinit var navView: NavigationView
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         homeBinding = HomeBinding.inflate(layoutInflater)
         setContentView(homeBinding.root)
         loader = createLoader(this)
+
+        //Nav drawer and navigation settings
         drawerLayout = homeBinding.drawerLayout
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         val navController = findNavController(R.id.nav_host_fragment)
-
         appBarConfiguration = AppBarConfiguration(setOf(
             R.id.addMuseumFragment, R.id.museumListFragment), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
-
         navView = homeBinding.navView
         navView.setupWithNavController(navController)
         initNavHeader()
 
+        //Check whether user is in Dark Mode
         checkDarkMode()
 
+        //Setup viewModel
+        loggedInViewModel = ViewModelProvider(this).get(LoggedInViewModel::class.java)
+
+        //Setup Observers
+        loggedInViewModel.liveFirebaseUser.observe(this, Observer { firebaseUser ->
+            if (firebaseUser != null)
+                updateNavHeader(loggedInViewModel.liveFirebaseUser.value!!)
+        })
+        loggedInViewModel.loggedOut.observe(this, Observer { loggedout ->
+            if (loggedout) {
+                startActivity(Intent(this, Login::class.java))
+            }
+        })
+
+        //Setup on checked listener for dark theme toggle button
         toggleDarkMode.setOnCheckedChangeListener{ _, isChecked ->
             if (isChecked) {
                 editor.putBoolean("night",true)
@@ -89,6 +106,10 @@ class Home : AppCompatActivity() {
             editor.commit()
         }
 
+        //Register profile image edit callback
+        registerProfileImagePickerCallback()
+
+        //Update current Location if user has given permission
         if(checkLocationPermissions(this)) {
             mapsViewModel.updateCurrentLocation()
         }
@@ -97,28 +118,14 @@ class Home : AppCompatActivity() {
 
     public override fun onStart() {
         super.onStart()
-        loggedInViewModel = ViewModelProvider(this).get(LoggedInViewModel::class.java)
-        loggedInViewModel.liveFirebaseUser.observe(this, Observer { firebaseUser ->
-            if (firebaseUser != null)
-                updateNavHeader(loggedInViewModel.liveFirebaseUser.value!!)
-        })
-
-        loggedInViewModel.loggedOut.observe(this, Observer { loggedout ->
-            if (loggedout) {
-                startActivity(Intent(this, Login::class.java))
-            }
-        })
-    registerProfileImagePickerCallback()
     }
 
     public override fun onResume() {
         super.onResume()
-        loggedInViewModel.liveFirebaseUser.observe(this, Observer { firebaseUser ->
-            if (firebaseUser != null)
-                updateNavHeader(loggedInViewModel.liveFirebaseUser.value!!)
-        })
+
     }
 
+    //Check if user is in dark mode and apply dark theme
     private fun checkDarkMode() {
         val sharedPreferences = getSharedPreferences("Mode", Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
@@ -139,7 +146,7 @@ class Home : AppCompatActivity() {
         headerView = homeBinding.navView.getHeaderView(0)
         navHeaderBinding = NavHeaderBinding.bind(headerView)
         navHeaderBinding.navHeaderImage.setOnClickListener{
-            //showLoader(loader, "Changing Profile Pic")
+            showLoader(loader, "Changing Profile Pic")
             showProfileImagePicker(intentLauncher)
         }
     }
@@ -147,6 +154,17 @@ class Home : AppCompatActivity() {
     private fun updateNavHeader(currentUser: FirebaseUser) {
         navHeaderBinding.navHeaderName.text = currentUser.displayName
         navHeaderBinding.navHeaderEmail.text = currentUser.email
+       /*
+        val facebookPhotoUrl = currentUser.providerData.get(1).photoUrl.toString()
+        if(facebookPhotoUrl != null && accessToken != null) {
+            Timber.i("photoURl: ${facebookPhotoUrl}?type=large?access_token=${accessToken.token}")
+            Picasso.get().load("${facebookPhotoUrl}?access_token=${accessToken.token}")
+                .resize(200, 200)
+                .transform(customTransformation())
+                .centerCrop()
+                .into(navHeaderBinding.navHeaderImage)
+        }
+        */
         if(currentUser.photoUrl != null) {
             Timber.i("photoURl: ${currentUser.photoUrl}")
             Picasso.get().load(currentUser.photoUrl)
@@ -154,8 +172,9 @@ class Home : AppCompatActivity() {
                 .transform(customTransformation())
                 .centerCrop()
                 .into(navHeaderBinding.navHeaderImage)
+            hideLoader(loader)
         }
-        hideLoader(loader)
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -197,6 +216,7 @@ class Home : AppCompatActivity() {
         Timber.i("LOC : %s", mapsViewModel.currentLocation.value)
     }
 
+    //Nav drawer sign-out item 0n-click method
     fun signOut(item: MenuItem) {
         loggedInViewModel.logOut()
         //Launch Login activity and clear the back stack to stop navigating back to the Home activity

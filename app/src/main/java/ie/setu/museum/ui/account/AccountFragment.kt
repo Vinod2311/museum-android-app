@@ -28,7 +28,6 @@ import ie.setu.museum.ui.auth.login.Login
 import ie.setu.museum.utils.createLoader
 import ie.setu.museum.utils.hideLoader
 import ie.setu.museum.utils.showLoader
-import timber.log.Timber
 
 class AccountFragment : Fragment() {
 
@@ -50,31 +49,29 @@ class AccountFragment : Fragment() {
     ): View? {
         _fragBinding = FragmentAccountBinding.inflate(inflater, container, false)
         val root = fragBinding.root
-        viewModel = ViewModelProvider(this).get(AccountViewModel::class.java)
-        setupMenu()
-        Timber.i("loggedinViewmodel: ${loggedInViewModel.liveFirebaseUser.value}")
-        //Timber.i("museumListViewModel: ${museumListViewModel.observableMuseumList.value}")
-        //fragBinding.userVM = viewModel
-        /*
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner, Observer { firebaseUser ->
-            if (firebaseUser != null){
-                viewModel.liveFirebaseUser.value = firebaseUser
-            }
-        })*/
 
+        //Setup viewModel
+        viewModel = ViewModelProvider(this).get(AccountViewModel::class.java)
+
+        setupMenu()
+
+        //Setup Observers
         viewModel.observableStatus.observe(viewLifecycleOwner, Observer {
             updateLoader(it)
         })
         viewModel.observableMuseumList.observe(viewLifecycleOwner, Observer {
             render(loggedInViewModel.liveFirebaseUser.value!!,viewModel.observableMuseumList.value!!) })
 
+        //Load the museum to be displayed
         viewModel.loadMuseum(loggedInViewModel.liveFirebaseUser.value!!)
 
 
+        //Setup button on-click listener
         fragBinding.editButton.setOnClickListener {
             showLoader(loader,"Updating User Details")
             viewModel.updateUser(loggedInViewModel.liveFirebaseUser, fragBinding.userFirstName.text.toString(),fragBinding.userLastName.text.toString())
         }
+
         return root
     }
 
@@ -96,6 +93,7 @@ class AccountFragment : Fragment() {
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
+    //Display museum details on screen
     fun render(user: FirebaseUser, userMuseums: List<MuseumModel>){
 
             fragBinding.userFirstName.setText(user.displayName?.split(" ")!![0] ?: "N/A")
@@ -105,6 +103,7 @@ class AccountFragment : Fragment() {
 
     }
 
+    //Update loader- hide if user is successful in updating user details or show error message if unsuccessful
     private fun updateLoader(status: Boolean){
         when (status) {
             true -> {

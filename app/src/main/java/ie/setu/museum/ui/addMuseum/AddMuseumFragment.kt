@@ -63,49 +63,42 @@ class AddMuseumFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _fragBinding = FragmentAddMuseumBinding.inflate(inflater, container, false)
-        //_fragBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_add_museum,container,false)
-        //fragBinding.lifecycleOwner = viewLifecycleOwner
         val root = fragBinding.root
+
+        //setup viewModel
         viewModel = ViewModelProvider(this).get(AddMuseumViewModel::class.java)
 
+        //data-binding
         fragBinding.museumVM = viewModel
+
+        setupMenu()
+
+        //set-up observers
         viewModel.observableStatus.observe(viewLifecycleOwner, Observer {
                 status -> status?.let { render(status) }})
 
         viewModel.observableMuseum.observe(viewLifecycleOwner, Observer {
             showMuseum()
         })
-        //showLoader(loader,"Fetching Images")
-        /*
-        viewModel.observableMuseumImages.observe(viewLifecycleOwner, Observer {
-            refreshImageSlider()
-            //hideLoader(loader)
-        })
 
-         */
-
+        //Setup category drop down menu
         val dropdownItems = resources.getStringArray(R.array.simple_items)
         val arrayAdapter = ArrayAdapter(requireActivity(), R.layout.dropdown_item, dropdownItems)
         fragBinding.category.setAdapter(arrayAdapter)
 
+        //register Callbacks
         registerImagePickerCallback()
         registerMapCallback()
 
-
+        //Button on-click listeners
         fragBinding.chooseImage.setOnClickListener{
-            //viewModel.cacheMuseum(fragBinding.nameText.text.toString(),fragBinding.shortDescriptionText.text.toString(),fragBinding.category.text.toString(), fragBinding.reviewText.text.toString(), fragBinding.ratingBar.rating)
             doSelectImage()
-
         }
-
         fragBinding.location.setOnClickListener{
-            //viewModel.cacheMuseum(fragBinding.nameText.text.toString(),fragBinding.shortDescriptionText.text.toString(),fragBinding.category.text.toString(), fragBinding.reviewText.text.toString(), fragBinding.ratingBar.rating)
             doSetLocation()
         }
-
         fragBinding.createButton.setOnClickListener{
             if (fragBinding.nameText.text.toString().isNotEmpty() && fragBinding.category.text.toString().isNotEmpty()){
-                //viewModel.cacheMuseum(museum)
                 viewModel.doAddOrSave(loggedInViewModel.liveFirebaseUser)
             } else if (fragBinding.nameText.text.toString().isEmpty()){
                 fragBinding.name.error = "Museum name is required"
@@ -113,10 +106,9 @@ class AddMuseumFragment : Fragment() {
             } else if (fragBinding.category.text.toString().isEmpty()){
                 fragBinding.categoryLayout.error = "Category is required"
             }
-
         }
 
-        setupMenu()
+        //Check if in add new museum mode or edit museum mode
         checkIfEdit()
 
         return root
@@ -189,11 +181,13 @@ class AddMuseumFragment : Fragment() {
         fragBinding.chooseImage.setText(R.string.change_image)
     }
 
+    //Show Museum details on screen
     fun showMuseum() {
         fragBinding.museumVM = viewModel
         refreshImageSlider()
     }
 
+    //Show error message if unsuccessful in adding a museum or go to museumList Fragment if successful
     private fun render(status: Boolean) {
         when (status) {
             true -> {

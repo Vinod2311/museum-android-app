@@ -6,7 +6,7 @@
     android:id="@+id/museumListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.museumList.MuseumHomeView">
+    tools:context=".ui.museumList.MuseumListFragment">
 
     <HorizontalScrollView
         android:id="@+id/chips"

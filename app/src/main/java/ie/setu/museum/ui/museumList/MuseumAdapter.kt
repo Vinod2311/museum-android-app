@@ -26,19 +26,12 @@ class MuseumAdapter(private var museums: ArrayList<MuseumModel>,
     RecyclerView.Adapter<MuseumAdapter.MainHolder>(), Filterable {
 
     private val completeList = museums
-    //private val favouriteList = museums.map { it ->
-    //    MuseumModelWithFavourites(it.name,it.category,it.shortDescription,it.review,it.rating,it.museumPreviewImage,it.profilePic,it.images,it.lat,it.lng,it.zoom,it.email,it.uid)
-    //}
+
     private var filteredList = ArrayList<MuseumModel>()
     var context: Context? = null
 
-    init{/*
-        for(museum in favouriteList){
-
-            museum.isFavourite = false
-        }*/
+    init{
         filteredList = completeList
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
@@ -54,8 +47,6 @@ class MuseumAdapter(private var museums: ArrayList<MuseumModel>,
 
     }
 
-
-
     override fun getItemCount(): Int = filteredList.size
 
 
@@ -65,11 +56,9 @@ class MuseumAdapter(private var museums: ArrayList<MuseumModel>,
         val readOnlyRow = readOnly
 
         fun bind(context:Context?, museum: MuseumModel, favouriteList: ArrayList<MuseumModel>?, listener: MuseumListener) {
-            //binding.name.text = museum.name
-            //binding.category.text = museum.category
+
             binding.museum = museum
             binding.root.tag = museum
-
 
             if (museum.images?.size != 0) {
                 Picasso.get()
